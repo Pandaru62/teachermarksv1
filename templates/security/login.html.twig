@@ -1,0 +1,56 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Log in!{% endblock %}
+
+{% block body %}
+
+<form method="post">
+    <div class="container-sm d-flex flex-column justify-content-center">
+
+        {% if error %}
+            <div class="alert alert-danger text-center">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+        {% endif %}
+
+        {% if app.user %}
+            <div class="alert alert-success text-center" role="alert">
+                Vous êtes connecté en tant que : <b>{{ app.user.userIdentifier }}</b>. <a href="{{ path('app_logout') }}">Se déconnecter</a>
+            </div>
+        {% endif %}
+
+
+        <h1 class="text-center text-success">TeacherMarks: L'outil de suivi des compétences</h1>
+        <p class="text-center">TeacherMarks a été réalisé pour simplifier la saisie des compétences des enseignants.</p>
+
+        <div class="bg-secondary bg-opacity-25 m-5 p-3 rounded-3">
+            <h2>Connectez-vous pour accéder aux fonctionnalités de l'application.</h2>
+
+            <div class="mb-3">
+                <label for="inputUsername" class="form-label">Pseudo de l'utilisateur</label>
+                <input type="text" value="{{ last_username }}" name="username" id="inputUsername" class="form-control" autocomplete="username" required autofocus>
+            </div>
+            <div class="mb-3">
+                <label for="inputPassword" class="form-label">Mot de passe</label>
+                <input type="password" name="password" id="inputPassword" class="form-control" autocomplete="current-password" required>
+            </div>
+            <input type="hidden" name="_csrf_token"
+                value="{{ csrf_token('authenticate') }}"
+            >
+
+            <div class="checkbox mb-3">
+                <label>
+                    <input type="checkbox" name="_remember_me"> Se souvenir de moi
+                </label>
+            </div>
+
+            <div class="mb-3 d-flex">
+                <button class="btn btn-lg btn-primary" type="submit">
+                    Se connecter
+                </button>
+                <button class="btn btn-outline-secondary ms-auto p-2" disabled>Mot de passe oublié ?</button>
+            </div>
+
+        </div>
+    </div>
+
+</form>
+{% endblock %}

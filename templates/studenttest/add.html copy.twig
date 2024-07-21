@@ -1,0 +1,90 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Teachermarks - Evaluation {% endblock %}
+
+{% block body %}
+    <div class="container d-flex flex-column justify-content-center">
+        <div class="d-flex align-items-center justify-content-center pb-3">
+            <h1 class="text-center">{{testInfo.description}}</h1>
+        </div>
+        <div class="row pb-3">
+            <div class="col-4">
+                <div class="bg-light rounded-5 p-3" id="student-info">
+                    <ul>
+                        <li>Classe : <span class="fw-bold">{{testInfo.schoolclass.name}}</span></li>
+                        <li>Date : <span class="fw-bold">{{testInfo.date|date('d/m/Y')}}</span></li>
+                        <li>Trimestre : <span class="fw-bold">TR {{testInfo.trimester}}</span></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-8">
+                <div class="table-responsive">
+                    <table class="table table-hover text-center table-bordered border-dark">
+                        <thead>
+                            <th colspan="5">Légende des compétences</th>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><div class="skill-level skill-level0">0</div></td>
+                                <td><div class="skill-level skill-level1">1</div></td>
+                                <td><div class="skill-level skill-level2">2</div></td>
+                                <td><div class="skill-level skill-level3">3</div></td>
+                                <td><div class="skill-level skill-level4">4</div></td>
+                            </tr>
+                            <tr>
+                                <td>Non maîtrisée</td>
+                                <td>Insuffisamment maîtrisée</td>
+                                <td>Fragilement maîtrisée</td>
+                                <td>Bien maîtrisée</td>
+                                <td>Très bien maîtrisée</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="pb-3">
+            <h2>Suivi de l'évaluation</h2>
+
+            <div class="table-responsive">
+                <form method="post" action="{{ path('add_skills', {'testid': testInfo.id}) }}">
+                <table class="table table-hover text-center equal-width-table">
+                    <thead>
+                        <tr>
+                            <th scope="col">Elève</th>
+                            <th scope="col"><span class="compet1">Lecture</span></th>
+                            <th scope="col"><span class="compet2">Connaissances</span></th>
+                            <th scope="col"><span class="compet3">Argumentation</span></th>
+                            <th scope="col"><span class="compet4">Ecrit</span></th>
+                            <th scope="col"><span class="compet5">Oral</span></th>
+                            <th scope="col">Note</th>
+                        </tr>                      
+                    </thead>
+                    <tbody>
+                        <form method="post">
+                            {% for student in students %}
+                            <tr class="table-secondary">
+                                <th scope="row"><a href="/showstudent{{ student.id }}">{{ student.lastname }} {{ student.firstname }}</a></th>
+                                {{ form_start(forms[student.id], {'attr': {'novalidate': 'novalidate'}}) }}
+                                <td>{{ form_widget(forms[student.id].skill1) }}</td>
+                                <td>{{ form_widget(forms[student.id].skill2) }}</td>
+                                <td>{{ form_widget(forms[student.id].skill3) }}</td>
+                                <td>{{ form_widget(forms[student.id].skill4) }}</td>
+                                <td>{{ form_widget(forms[student.id].skill5) }}</td>
+                                <td>{{ form_widget(forms[student.id].mark) }}</td>
+                                {{ form_end(forms[student.id]) }}
+                            </tr>
+                            {% endfor %}
+                            
+
+                    </tbody>
+                </table> 
+                <button type="submit" class="btn btn-primary">Save All</button>
+                        </form>
+            </div>
+        </div>
+
+    </div>
+{% endblock %}
+

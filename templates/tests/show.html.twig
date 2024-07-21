@@ -1,0 +1,30 @@
+{% extends "base.html.twig" %}
+
+
+
+{% block body %}
+
+    <div class="container d-flex flex-column justify-content-center">
+
+        <div class="bg-secondary bg-opacity-25 m-5 p-3 rounded-3">
+            <h2>Mes évaluations :</h2>
+
+            <div class="d-flex flex-wrap justify-content-around align-items-center m-3">
+                {% for test in tests %}
+                    <ul class="list-group text-center pb-3 m-3">
+                        <li href="#" class="list-group-item active d-flex justify-content-between align-items-center">
+                            <div><span class="fw-bold">{{test.description}}</span> <br> ({{test.schoolclass.name}}) </div>
+                            <a href="/edittest/{{test.id}}" class="btn btn-outline-light"><i class="bi bi-pencil"></i></a>
+                        </li>
+                        <a href="/seeskills/{{test.id}}" class="list-group-item list-group-item-action"><i class="bi bi-eye-fill"></i> Voir les compétences</a>
+                        <a href="/seeskills/{{test.id}}" class="list-group-item list-group-item-action"><i class="bi bi-plus-circle-fill"></i> Ajouter les compétences</a>
+                        <a href="/deletetest/{{test.id}}" class="list-group-item list-group-item-action text-danger"><i class="bi bi-trash-fill"></i>  Supprimer l'évaluation</a>
+                        
+                    </ul>
+                {% endfor %}
+
+            </div>
+
+        </div>
+    </div>
+{% endblock %}

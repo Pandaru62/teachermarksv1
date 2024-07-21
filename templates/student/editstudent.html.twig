@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Teachermarks - Modification d'élève{% endblock %}
+
+{% block body %}
+
+<div class="container">
+    <div class="bg-secondary bg-opacity-25 m-5 p-3 rounded-3">
+
+        <h2>Modifier les informations d'un élève</h2>
+
+        {{form_start(form)}}
+        {{ form_widget(form) }}
+        <button type="submit" class="btn btn-success rounded-3">Valider les modifications</button>
+        {{form_end(form)}}
+        
+    </div>
+</div>
+
+
+{% endblock %}

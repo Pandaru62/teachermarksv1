@@ -1,0 +1,268 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Teachermarks - fiche élève {% endblock %}
+
+{% block body %}
+<div class="container-fluid px-3 d-flex justify-content-center">
+    <div class="row">
+        <div class="d-flex align-items-center justify-content-between pb-3">
+            <a href="/showstudent{{previousStudent['id']}}"" class="btn btn-success"><i class="bi bi-arrow-left"></i> <span class="text-uppercase">{{previousStudent['lastname']}}</span> {{previousStudent['firstname']}}</a>
+            <h1 class="text-center">Passeport élève ({{student.schoolclass.name}})</h1>
+            <a href="/showstudent{{nextStudent['id']}}" class="btn btn-success"><span class="text-uppercase">{{nextStudent['lastname']}}</span> {{nextStudent['firstname']}} <i class="bi bi-arrow-right"></i></a>
+        </div>
+        <div class="row pb-3">
+            <div class="col-lg-4">
+                <div class="bg-light rounded-5 p-3 d-flex justify-content-around align-items-center" id="student-info">
+                    <ul>
+                        <li>Nom : <span class="fw-bold text-uppercase">{{student.lastname}}</span></li>
+                        <li>Prénom : <span class="fw-bold">{{student.firstname}}</span></li>
+                        <li>Classe : <span class="fw-bold">{{student.schoolclass.name}}</span></li>
+                    </ul>
+                    <div>
+                        <a href="/editstudent/{{student.id}}" class="btn btn-outline-success"><i class="bi bi-pencil"></i> Editer l'élève</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-8">
+                <div class="table-responsive">
+                    <table class="display-none display-sm-flex table table-hover text-center table-bordered border-dark">
+                        <thead>
+                            <th colspan="5">Légende des compétences</th>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><div class="skill-level skill-level0">0</div></td>
+                                <td><div class="skill-level skill-level1">1</div></td>
+                                <td><div class="skill-level skill-level2">2</div></td>
+                                <td><div class="skill-level skill-level3">3</div></td>
+                                <td><div class="skill-level skill-level4">4</div></td>
+                            </tr>
+                            <tr>
+                                <td>Non maîtrisée</td>
+                                <td>Insuffisamment maîtrisée</td>
+                                <td>Fragilement maîtrisée</td>
+                                <td>Bien maîtrisée</td>
+                                <td>Très bien maîtrisée</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="pb-3">
+            <h2>Suivi des évaluations</h2>
+
+            <div class="table-responsive">
+                <table class="table table-hover text-center align-middle">
+                    <thead>
+                        <tr>
+                            <th scope="col"></th>
+                            {% for studentTest in studentTests %}
+                                <th scope="col"><a href="seeskills/{{studentTest.test.id}}">{{studentTest.test.description}}</a></th>
+                            {% endfor %}
+                          </tr>                      
+                    </thead>
+                    <tbody>
+                        <tr class="table-secondary">
+                            <th scope="row">Trimestre</th>
+                            {% for studentTest in studentTests %}
+                                <td>TR {{studentTest.test.trimester}}</td>
+                            {% endfor %}
+
+                        </tr>
+                        <tr class="table-secondary">
+                            <th scope="row">Date</th>
+                            {% for studentTest in studentTests %}
+                                <td>{{studentTest.test.date|date('d/m/Y')}}</td>
+                            {% endfor %}
+
+                        </tr>
+                        <tr>
+                            <th scope="row"><span class="compet1">Lecture</span></th>
+                            {% for studentTest in studentTests %}
+                                <td><div class="skill-level skill-level{{studentTest.skill1}}">{{studentTest.skill1}}</div></td>
+                            {% endfor %}
+                        </tr>
+                        <tr>
+                            <th scope="row"><span class="compet2">Connaissances</span></th>
+                            {% for studentTest in studentTests %}
+                                <td><div class="skill-level skill-level{{studentTest.skill2}}">{{studentTest.skill2}}</div></td>
+                            {% endfor %}
+                        </tr>
+                        <tr>
+                            <th scope="row"><span class="compet3">Argumentation</span></th>
+                            {% for studentTest in studentTests %}
+                                <td><div class="skill-level skill-level{{studentTest.skill3}}">{{studentTest.skill3}}</div></td>
+                            {% endfor %}
+                        </tr>
+                        <tr>
+                            <th scope="row"><span class="compet4">Ecrit</span></th>
+                            {% for studentTest in studentTests %}
+                                <td><div class="skill-level skill-level{{studentTest.skill4}}">{{studentTest.skill4}}</div></td>
+                            {% endfor %}
+                        </tr>
+                        <tr>
+                            <th scope="row"><span class="compet5">Oral</span></th>
+                            {% for studentTest in studentTests %}
+                                <td><div class="skill-level skill-level{{studentTest.skill5}}">{{studentTest.skill5}}</div></td>
+                            {% endfor %}
+                        </tr>
+                        <tr class="table-secondary">
+                            <th scope="row">Note</th>
+                            {% for studentTest in studentTests %}
+                                <td>{{studentTest.mark}} / {{studentTest.test.scale}}</td>
+                            {% endfor %}
+
+                        </tr>
+                    </tbody>
+                </table> 
+            </div>
+        </div>
+
+            <h2>Récapitulatif trimestriel</h2>
+
+            <div class="row pb-3">
+                <div class="col-lg-6">
+                    <div class="table-responsive">
+                        <table class="table table-hover text-center align-middle">
+                            <thead>
+                                <tr>
+                                    <th scope="col"></th>
+                                    <th scope="col">TR1</th>
+                                    <th scope="col">TR2</th>
+                                    <th scope="col">TR3</th>
+                                    <th scope="col">BILAN</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <th scope="row"><span class="compet1">Lecture</span></th>
+                                    <td>
+                                        <span class="skill-level skill-level{{ averageStudentTest[1] is defined ? averageStudentTest[1]['skill1']|round(0,'floor') : "x"}}">
+                                            {{ averageStudentTest[1] is defined ? averageStudentTest[1]['skill1'] : "x"}}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span class="skill-level skill-level{{ averageStudentTest[2] is defined ? averageStudentTest[2]['skill1']|round(0,'floor') : "x"}}">
+                                            {{ averageStudentTest[2] is defined ? averageStudentTest[2]['skill1'] : "x"}}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span class="skill-level skill-level{{ averageStudentTest[3] is defined ? averageStudentTest[3]['skill1']|round(0,'floor') : "x"}}">
+                                            {{ averageStudentTest[3] is defined ? averageStudentTest[3]['skill1'] : "x"}}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span class="skill-level skill-level{{ averageStudentTest['year'] is defined ? averageStudentTest['year']['skill1']|round(0,'floor') : "x"}}">
+                                            {{ averageStudentTest['year'] is defined ? averageStudentTest['year']['skill1'] : "x"}}
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th scope="row"><span class="compet2">Connaissances</span></th>
+                                    <td>
+                                        <span class="skill-level skill-level{{ averageStudentTest[1] is defined ? averageStudentTest[1]['skill2']|round(0,'floor') : "x"}}">
+                                            {{ averageStudentTest[1] is defined ? averageStudentTest[1]['skill2'] : "x"}}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span class="skill-level skill-level{{ averageStudentTest[2] is defined ? averageStudentTest[2]['skill2']|round(0,'floor') : "x"}}">
+                                            {{ averageStudentTest[2] is defined ? averageStudentTest[2]['skill2'] : "x"}}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span class="skill-level skill-level{{ averageStudentTest[3] is defined ? averageStudentTest[3]['skill2']|round(0,'floor') : "x"}}">
+                                            {{ averageStudentTest[3] is defined ? averageStudentTest[3]['skill2'] : "x"}}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span class="skill-level skill-level{{ averageStudentTest['year'] is defined ? averageStudentTest['year']['skill2']|round(0,'floor') : "x"}}">
+                                            {{ averageStudentTest['year'] is defined ? averageStudentTest['year']['skill2'] : "x"}}
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th scope="row"><span class="compet3">Argumentation</span></th>
+                                    <td>
+                                        <span class="skill-level skill-level{{ averageStudentTest[1] is defined ? averageStudentTest[1]['skill3']|round(0,'floor') : "x"}}">
+                                            {{ averageStudentTest[1] is defined ? averageStudentTest[1]['skill3'] : "x"}}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span class="skill-level skill-level{{ averageStudentTest[2] is defined ? averageStudentTest[2]['skill3']|round(0,'floor') : "x"}}">
+                                            {{ averageStudentTest[2] is defined ? averageStudentTest[2]['skill3'] : "x"}}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span class="skill-level skill-level{{ averageStudentTest[3] is defined ? averageStudentTest[3]['skill3']|round(0,'floor') : "x"}}">
+                                            {{ averageStudentTest[3] is defined ? averageStudentTest[3]['skill3'] : "x"}}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span class="skill-level skill-level{{ averageStudentTest['year'] is defined ? averageStudentTest['year']['skill3']|round(0,'floor') : "x"}}">
+                                            {{ averageStudentTest['year'] is defined ? averageStudentTest['year']['skill3'] : "x"}}
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th scope="row"><span class="compet4">Ecrit</span></th>
+                                    <td>
+                                        <span class="skill-level skill-level{{ averageStudentTest[1] is defined ? averageStudentTest[1]['skill4']|round(0,'floor') : "x"}}">
+                                            {{ averageStudentTest[1] is defined ? averageStudentTest[1]['skill4'] : "x"}}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span class="skill-level skill-level{{ averageStudentTest[2] is defined ? averageStudentTest[2]['skill4']|round(0,'floor') : "x"}}">
+                                            {{ averageStudentTest[2] is defined ? averageStudentTest[2]['skill4'] : "x"}}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span class="skill-level skill-level{{ averageStudentTest[3] is defined ? averageStudentTest[3]['skill4']|round(0,'floor') : "x"}}">
+                                            {{ averageStudentTest[3] is defined ? averageStudentTest[3]['skill4'] : "x"}}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span class="skill-level skill-level{{ averageStudentTest['year'] is defined ? averageStudentTest['year']['skill4']|round(0,'floor') : "x"}}">
+                                            {{ averageStudentTest['year'] is defined ? averageStudentTest['year']['skill4'] : "x"}}
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <tr>
+                                    <th scope="row"><span class="compet5">Oral</span></th>
+                                    <td>
+                                        <span class="skill-level skill-level{{ averageStudentTest[1] is defined ? averageStudentTest[1]['skill5']|round(0,'floor') : "x"}}">
+                                            {{ averageStudentTest[1] is defined ? averageStudentTest[1]['skill5'] : "x"}}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span class="skill-level skill-level{{ averageStudentTest[2] is defined ? averageStudentTest[2]['skill5']|round(0,'floor') : "x"}}">
+                                            {{ averageStudentTest[2] is defined ? averageStudentTest[2]['skill5'] : "x"}}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span class="skill-level skill-level{{ averageStudentTest[3] is defined ? averageStudentTest[3]['skill5']|round(0,'floor') : "x"}}">
+                                            {{ averageStudentTest[3] is defined ? averageStudentTest[3]['skill5'] : "x"}}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span class="skill-level skill-level{{ averageStudentTest['year'] is defined ? averageStudentTest['year']['skill5']|round(0,'floor') : "x"}}">
+                                            {{ averageStudentTest['year'] is defined ? averageStudentTest['year']['skill5'] : "x"}}
+                                        </span>
+                                    </td>
+                                </tr>
+                                </tr>
+                            </tbody>
+                        </table> 
+                    </div> 
+                </div>
+                <div class="offset-lg-1 col-lg-5 d-flex justify-content-center align-items-center rounded-5">
+                    {{ render_chart(chart, {'class': 'my-chart'}) }} 
+                </div>
+               
+            </div>
+    </div>
+</div>
+{% endblock %}
+

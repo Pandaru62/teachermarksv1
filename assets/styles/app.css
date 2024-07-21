@@ -1,0 +1,103 @@
+.class-button {
+    color: white;
+    font-weight: 700;
+}
+
+.class-button:hover {
+    font-size: 1.2em;
+    
+}
+
+/* Fonctionnalités et mises à jour */
+
+.update-list li {
+    list-style: none;
+}
+
+/* Passeport élève */
+
+#student-info ul {
+    list-style: none;
+    font-size: 1.1em;
+}
+
+.compet1 {
+    background-color: #f7d1d5;
+    display: inline-block;
+    width: 100%;
+    padding: 8px 8px;
+    text-transform: uppercase;
+    border-radius: 8px;
+}
+
+.compet2 {
+    background-color: #ff6d6d;
+    display: inline-block;
+    width: 100%;
+    padding: 8px 8px;
+    text-transform:uppercase;
+    border-radius: 8px;
+}
+
+.compet3 {
+    background-color: #b7b3ca;
+    display: inline-block;
+    width: 100%;
+    padding: 8px 8px;
+    text-transform:uppercase;
+    border-radius: 8px;
+}
+
+.compet4 {
+    background-color: #5983b0;
+    display: inline-block;
+    width: 100%;
+    padding: 8px 8px;
+    text-transform:uppercase;
+    border-radius: 8px;
+    color: white;
+}
+
+.compet5 {
+    background-color: #dde8cb;
+    display: inline-block;
+    width: 100%;
+    padding: 8px 8px;
+    text-transform:uppercase;
+    border-radius: 8px;
+}
+
+.skill-level {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: auto;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    font-weight: 800;
+}
+
+.skill-level0 {
+    background-color: #b7b1b1;
+}
+
+.skill-level1 {
+    background-color: #ff4747;
+}
+
+.skill-level2 {
+    background-color: #ffc756fe;
+}
+
+.skill-level3 {
+    background-color: #6dffa7;
+}
+
+.skill-level4 {
+    background-color: #319740;
+}
+
+.equal-width-table th, .equal-width-table td {
+    width: calc(100% / 7);
+}
