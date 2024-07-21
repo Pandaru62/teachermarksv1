@@ -257,12 +257,16 @@
                         </table> 
                     </div> 
                 </div>
-                <div class="offset-lg-1 col-lg-5 d-flex justify-content-center align-items-center rounded-5">
-                    {{ render_chart(chart, {'class': 'my-chart'}) }} 
+                <div class="offset-lg-1 col-lg-5 d-flex justify-content-center align-items-center rounded-5" id="studentChart">
+                    <canvas id="myChart" width="400" height="400"></canvas>
+                    <script type="application/json" id="chartData">{{ chartData|raw }}</script>
+                    <script type="application/json" id="chartOptions">{{ chartOptions|raw }}</script>
+                    <script src="{{ asset('build/app.js') }}"></script>
                 </div>
                
             </div>
     </div>
 </div>
+
 {% endblock %}
 

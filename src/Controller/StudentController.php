@@ -17,8 +17,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Psr\Log\LoggerInterface;
-use Symfony\UX\Chartjs\Builder\ChartBuilderInterface;
-use Symfony\UX\Chartjs\Model\Chart;
+// use Symfony\UX\Chartjs\Builder\ChartBuilderInterface;
+// use Symfony\UX\Chartjs\Model\Chart;
 
 class StudentController extends AbstractController
 {
@@ -55,7 +55,7 @@ class StudentController extends AbstractController
 
 
     #[Route('/showstudent{studentid}', name: 'app_student')]
-    public function show($studentid, ChartBuilderInterface $chartBuilder): Response
+    public function show($studentid): Response
     {
         // get the student from the given id
         $studentrepo=$this->em->getRepository(Students::class);
@@ -182,57 +182,103 @@ class StudentController extends AbstractController
 
         // getting the chart
 
-        $chart = $chartBuilder->createChart(Chart::TYPE_RADAR);
+        // $chart = $chartBuilder->createChart(Chart::TYPE_RADAR);
 
-        $labels = ['year', 1, 2, 3];
-        $colors = [
-            'rgba(255, 99, 132, 0.2)' => 'rgb(255, 99, 132)',
-            'rgba(72, 143, 51, 0.2)' => 'rgb(72, 143, 51)',
-            'rgba(88, 74, 213, 0.2)' => 'rgb(88, 74, 213)',
-            'rgba(255, 219, 39, 0.2)' => 'rgb(255, 219, 39)',
-        ];
-        $datasetLabels = [
-            'year' => 'Récap annuel',
-            1 => 'Trimestre 1',
-            2 => 'Trimestre 2',
-            3 => 'Trimestre 3'
-        ];
+        // $labels = ['year', 1, 2, 3];
+        // $colors = [
+        //     'rgba(255, 99, 132, 0.2)' => 'rgb(255, 99, 132)',
+        //     'rgba(72, 143, 51, 0.2)' => 'rgb(72, 143, 51)',
+        //     'rgba(88, 74, 213, 0.2)' => 'rgb(88, 74, 213)',
+        //     'rgba(255, 219, 39, 0.2)' => 'rgb(255, 219, 39)',
+        // ];
+        // $datasetLabels = [
+        //     'year' => 'Récap annuel',
+        //     1 => 'Trimestre 1',
+        //     2 => 'Trimestre 2',
+        //     3 => 'Trimestre 3'
+        // ];
 
-        $datasets = [];
-        $i = 0;
-        foreach ($labels as $label) {
-            if (isset($averageStudentTest[$label])) {
-                $datasets[] = [
-                    'label' => $datasetLabels[$label],
-                    'fill' => true,
-                    'backgroundColor' => array_keys($colors)[$i],
-                    'borderColor' => array_values($colors)[$i],
-                    'data' => array_values($averageStudentTest[$label]),
-                    'hidden' => $i !== 0 // only the first dataset is visible initially
-                ];
+        // $datasets = [];
+        // $i = 0;
+        // foreach ($labels as $label) {
+        //     if (isset($averageStudentTest[$label])) {
+        //         $datasets[] = [
+        //             'label' => $datasetLabels[$label],
+        //             'fill' => true,
+        //             'backgroundColor' => array_keys($colors)[$i],
+        //             'borderColor' => array_values($colors)[$i],
+        //             'data' => array_values($averageStudentTest[$label]),
+        //             'hidden' => $i !== 0 // only the first dataset is visible initially
+        //         ];
 
-            }
+        //     }
 
-            $i++;
+        //     $i++;
+        // }
+
+        // $chart->setData([
+        //     'labels' => ['Lecture', 'Connaissances', 'Argumentation', 'Ecrit', 'Oral'],
+        //     'datasets' => $datasets
+        // ]);
+
+        // $chart->setOptions([
+        //     'scales' => [
+        //         'r' => [
+        //             'angleLines' => [
+        //                 'display' => false
+        //             ],
+        //             'suggestedMin' => 0,
+        //             'suggestedMax' => 4
+        //         ]
+        //     ]
+        // ]);
+
+    $labels = ['year', 1, 2, 3];
+    $colors = [
+        'rgba(255, 99, 132, 0.2)' => 'rgb(255, 99, 132)',
+        'rgba(72, 143, 51, 0.2)' => 'rgb(72, 143, 51)',
+        'rgba(88, 74, 213, 0.2)' => 'rgb(88, 74, 213)',
+        'rgba(255, 219, 39, 0.2)' => 'rgb(255, 219, 39)',
+    ];
+    $datasetLabels = [
+        'year' => 'Récap annuel',
+        1 => 'Trimestre 1',
+        2 => 'Trimestre 2',
+        3 => 'Trimestre 3'
+    ];
+
+    $datasets = [];
+    $i = 0;
+    foreach ($labels as $label) {
+        if (isset($averageStudentTest[$label])) {
+            $datasets[] = [
+                'label' => $datasetLabels[$label],
+                'fill' => true,
+                'backgroundColor' => array_keys($colors)[$i],
+                'borderColor' => array_values($colors)[$i],
+                'data' => array_values($averageStudentTest[$label]),
+                'hidden' => $i !== 0 // only the first dataset is visible initially
+            ];
         }
+        $i++;
+    }
 
-        $chart->setData([
-            'labels' => ['Lecture', 'Connaissances', 'Argumentation', 'Ecrit', 'Oral'],
-            'datasets' => $datasets
-        ]);
+    $chartData = [
+        'labels' => ['Lecture', 'Connaissances', 'Argumentation', 'Ecrit', 'Oral'],
+        'datasets' => $datasets
+    ];
 
-        $chart->setOptions([
-            'scales' => [
-                'r' => [
-                    'angleLines' => [
-                        'display' => false
-                    ],
-                    'suggestedMin' => 0,
-                    'suggestedMax' => 4
-                ]
+    $chartOptions = [
+        'scales' => [
+            'r' => [
+                'angleLines' => [
+                    'display' => false
+                ],
+                'suggestedMin' => 0,
+                'suggestedMax' => 4
             ]
-        ]);
-
+        ]
+    ];
 
         return $this->render('student/showstudent.html.twig', [
             'student' => $showStudent,
@@ -242,7 +288,9 @@ class StudentController extends AbstractController
             'previousStudent' => $previousStudent,
             'nextStudent' => $nextStudent,
             'averageStudentTest' => $averageStudentTest,
-            'chart' => $chart
+            // 'chart' => $chart,
+            'chartData' => json_encode($chartData),
+            'chartOptions' => json_encode($chartOptions)
         ]);
     }
 
