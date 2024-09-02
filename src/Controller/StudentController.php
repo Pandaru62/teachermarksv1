@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Schoolclass;
 use App\Entity\Students;
 use App\Form\StudentFormType;
 use App\Entity\Test;
@@ -17,6 +18,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\HttpFoundation\JsonResponse;
 // use Symfony\UX\Chartjs\Builder\ChartBuilderInterface;
 // use Symfony\UX\Chartjs\Model\Chart;
 
@@ -52,6 +54,41 @@ class StudentController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
+
+    #[Route('/addmanystudents/{classid}', name: 'add_many_students')]
+    public function addManyStudents($classid): Response
+    {
+        $schoolClass = $this->em->getRepository(Schoolclass::class)->find($classid);
+
+        return $this->render('student/addmanystudents.html.twig', [
+            'schoolClass' => $schoolClass]);
+    }
+
+    #[Route('/registermany/{classid}', name: 'register_many_students')]
+    public function registerMany(Request $request, $classid): Response
+    {
+
+        $schoolClass = $this->em->getRepository(Schoolclass::class)->find($classid);
+        $data = json_decode($request->getContent(), true);
+
+        if (!$data) {
+            return new JsonResponse(['status' => 'error', 'message' => 'No data provided'], Response::HTTP_BAD_REQUEST);
+        }
+
+        foreach ($data as $studentData) {
+            $student = new Students();
+            $student->setLastname($studentData['last_name'] ?? '');
+            $student->setFirstname($studentData['first_name'] ?? '');
+            $student->setSchoolclass($schoolClass);
+            
+            $this->em->persist($student);
+        }
+
+        $this->em->flush();
+
+        return $this->redirectToRoute('showClass', ['classid' => $schoolClass->getId()]);
+    }
+
 
 
     #[Route('/showstudent{studentid}', name: 'app_student')]
@@ -113,6 +150,9 @@ class StudentController extends AbstractController
                     'skill3' => [],
                     'skill4' => [],
                     'skill5' => [],
+                    'mark' => [],
+                    'scale' => [],
+                    'coefficient' => []
                 ];
             }
             
@@ -131,19 +171,47 @@ class StudentController extends AbstractController
             if ($studentTest->getSkill5() !== null) {
                 $trimesterData[$trimester]['skill5'][] = $studentTest->getSkill5();
             }
+            if ($studentTest->getMark() !== null) {
+                $trimesterData[$trimester]['mark'][] = $studentTest->getMark();
+            }
+            if ($studentTest->getTest()->getScale() !== null) {
+                $trimesterData[$trimester]['scale'][] = $studentTest->getTest()->getScale();
+            }
+            if ($studentTest->getTest()->getCoefficient() !== null) {
+                $trimesterData[$trimester]['coefficient'][] = $studentTest->getTest()->getCoefficient();
+            }
         }
 
-        // Calculate averages for each trimester and each skill
+        // Calculate average skill for each trimester and each skill
         foreach ($trimesterData as $trimester => $skills) {
+
+            // part where the MOYENNE is calculated for each trimester
+            $numberOfMarks = count($skills['mark']);
+            if($numberOfMarks > 0) {
+
+                $totalMark = 0;
+                $totalScale = 0;
+
+                for ($i = 0; $i < $numberOfMarks; $i++) {
+                    $totalMark += ($skills['mark'][$i])*($skills['coefficient'][$i]);
+                    $totalScale += ($skills['scale'][$i])*($skills['coefficient'][$i]);
+                }
+
+                $averageMark = round((($totalMark / $totalScale) * 20), 2);
+
+            } else {
+                $averageMark = null;
+            }
+
             $averageStudentTest[$trimester] = [
                 'skill1' => count($skills['skill1']) > 0 ? round(array_sum($skills['skill1']) / count($skills['skill1']), 1) : null,
                 'skill2' => count($skills['skill2']) > 0 ? round(array_sum($skills['skill2']) / count($skills['skill2']), 1) : null,
                 'skill3' => count($skills['skill3']) > 0 ? round(array_sum($skills['skill3']) / count($skills['skill3']), 1) : null,
                 'skill4' => count($skills['skill4']) > 0 ? round(array_sum($skills['skill4']) / count($skills['skill4']), 1) : null,
                 'skill5' => count($skills['skill5']) > 0 ? round(array_sum($skills['skill5']) / count($skills['skill5']), 1) : null,
+                'mark' => $averageMark,
             ];
         }
-
             
         // Calculate overall yearly averages, excluding null values
         $yearlySkills = [
@@ -152,6 +220,7 @@ class StudentController extends AbstractController
             'skill3' => [],
             'skill4' => [],
             'skill5' => [],
+            'mark' => []
         ];
 
         foreach ($averageStudentTest as $trimester => $skills) {
@@ -170,6 +239,9 @@ class StudentController extends AbstractController
             if ($skills['skill5'] !== null) {
                 $yearlySkills['skill5'][] = $skills['skill5'];
             }
+            if ($skills['mark'] !== null) {
+                $yearlySkills['mark'][] = $skills['mark'];
+            }
         }
 
         $averageStudentTest['year'] = [
@@ -180,58 +252,9 @@ class StudentController extends AbstractController
             'skill5' => count($yearlySkills['skill5']) > 0 ? round(array_sum($yearlySkills['skill5']) / count($yearlySkills['skill5']), 1) : null,
         ];
 
-        // getting the chart
+        // This one is separated to avoid conflict with the diagram
+        $averageYearMark = count($yearlySkills['mark']) > 0 ? round(array_sum($yearlySkills['mark']) / count($yearlySkills['mark']), 2) : null;
 
-        // $chart = $chartBuilder->createChart(Chart::TYPE_RADAR);
-
-        // $labels = ['year', 1, 2, 3];
-        // $colors = [
-        //     'rgba(255, 99, 132, 0.2)' => 'rgb(255, 99, 132)',
-        //     'rgba(72, 143, 51, 0.2)' => 'rgb(72, 143, 51)',
-        //     'rgba(88, 74, 213, 0.2)' => 'rgb(88, 74, 213)',
-        //     'rgba(255, 219, 39, 0.2)' => 'rgb(255, 219, 39)',
-        // ];
-        // $datasetLabels = [
-        //     'year' => 'Récap annuel',
-        //     1 => 'Trimestre 1',
-        //     2 => 'Trimestre 2',
-        //     3 => 'Trimestre 3'
-        // ];
-
-        // $datasets = [];
-        // $i = 0;
-        // foreach ($labels as $label) {
-        //     if (isset($averageStudentTest[$label])) {
-        //         $datasets[] = [
-        //             'label' => $datasetLabels[$label],
-        //             'fill' => true,
-        //             'backgroundColor' => array_keys($colors)[$i],
-        //             'borderColor' => array_values($colors)[$i],
-        //             'data' => array_values($averageStudentTest[$label]),
-        //             'hidden' => $i !== 0 // only the first dataset is visible initially
-        //         ];
-
-        //     }
-
-        //     $i++;
-        // }
-
-        // $chart->setData([
-        //     'labels' => ['Lecture', 'Connaissances', 'Argumentation', 'Ecrit', 'Oral'],
-        //     'datasets' => $datasets
-        // ]);
-
-        // $chart->setOptions([
-        //     'scales' => [
-        //         'r' => [
-        //             'angleLines' => [
-        //                 'display' => false
-        //             ],
-        //             'suggestedMin' => 0,
-        //             'suggestedMax' => 4
-        //         ]
-        //     ]
-        // ]);
 
     $labels = ['year', 1, 2, 3];
     $colors = [
@@ -288,9 +311,9 @@ class StudentController extends AbstractController
             'previousStudent' => $previousStudent,
             'nextStudent' => $nextStudent,
             'averageStudentTest' => $averageStudentTest,
-            // 'chart' => $chart,
             'chartData' => json_encode($chartData),
-            'chartOptions' => json_encode($chartOptions)
+            'chartOptions' => json_encode($chartOptions),
+            'averageYearMark' => $averageYearMark
         ]);
     }
 

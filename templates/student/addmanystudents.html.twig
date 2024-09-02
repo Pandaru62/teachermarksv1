@@ -1,0 +1,107 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Ajout d'élèves{% endblock %}
+
+{% block body %}
+<div class="container-fluid">
+    <h1 class="mb-3">Ajouter plusieurs élèves à la classe <strong>{{schoolClass.name}}</strong></h1>
+    <p class="mb-3">Faites un copier-coller de la liste de vos étudiants puis cliquez sur "envoyer".</p>
+
+    <form>
+        <div class="form-floating" id="student-list">
+            <textarea class="form-control" placeholder="Copiez-collez les étudiants" id="studentListTextarea" style="height: 150px"></textarea>
+            <label for="studentListTextarea">NOM Prénom</label>
+        </div>
+
+        <button id="sendlist" type="submit" class="btn btn-primary mt-3">Envoyer</button>
+    </form>
+
+    <form id="add-students-form" method="POST" action="/registermany/{{schoolClass.id}}" class="d-none">
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token('add-students') }}">
+
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Nom :</th>
+                        <th>Prénom :</th>
+                    </tr>
+                </thead>
+                <tbody id="tbody-content">
+                </tbody>
+            </table>
+        </div>
+        <button id="savestudentlist" type="submit" class="btn btn-primary mt-3">Ajouter les étudiants</button>
+    </form>
+</div>
+
+<script>
+    // Get the list from the textarea
+    const sendButton = document.getElementById('sendlist');
+    const studentListTextArea = document.getElementById('studentListTextarea');
+    const tbodyContent = document.getElementById('tbody-content');
+    const addStudentsForm = document.getElementById('add-students-form');
+
+    sendButton.addEventListener('click', function(event) {
+        event.preventDefault();
+
+        const lines = studentListTextArea.value.split('\n');
+
+        const result = lines.map(line => {
+            // Split the line by spaces and remove any empty entries
+            return line.split(/\s+/).filter(part => part.trim() !== '');
+        });
+
+        let tableContent = '';
+
+        result.forEach((element, index) => {
+            tableContent += `
+            <tr>
+                <td>
+                    <input type="text" class="form-control" name="last-name[]" value="${element[0] || ''}">
+                </td>
+                <td>
+                    <input type="text" class="form-control" name="first-name[]" value="${element[1] || ''}">
+                </td>
+            </tr>
+            `;
+        });
+
+        tbodyContent.innerHTML = tableContent;
+
+        // Show the form with the generated table
+        addStudentsForm.classList.remove('d-none');
+    });
+
+    addStudentsForm.addEventListener('submit', function(event) {
+        event.preventDefault();
+
+        const formData = new FormData(addStudentsForm);
+        const data = [];
+
+        // Collect data from form fields
+        for (let i = 0; i < formData.getAll('first-name[]').length; i++) {
+            data.push({
+                last_name: formData.getAll('last-name[]')[i],
+                first_name: formData.getAll('first-name[]')[i],
+            });
+        }
+
+        fetch(addStudentsForm.action, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': formData.get('_csrf_token')
+            },
+            body: JSON.stringify(data)
+        })
+        .then(response => response.json())
+        .then(result => {
+            console.log('Success:', result);
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    });
+</script>
+{% endblock %}
