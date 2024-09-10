@@ -1,15 +1,13 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Teachermarks - Saisie des compétences{% endblock %}
+{% block title %}Teachermarks - Evaluation{% endblock %}
 
 {% block body %}
 
-<div class="container d-flex flex-column justify-content-center">
-    <div class="d-flex align-items-center justify-content-center pb-3">
-        <h1 class="text-center">Eval : <b>{{testInfo.description}}</b></h1>
-    </div>
+<div class="container-fluid px-3">
+        <h1 class="text-center pb-3">Eval : <b>{{testInfo.description}}</b></h1>
     <div class="row pb-3">
-        <div class="col-4">
+        <div class="col-lg-6">
             <div class="bg-light rounded-5 p-3 d-flex justify-content-around align-items-center" id="test-info">
                 <ul>
                     <li>Classe : <span class="fw-bold">{{testInfo.schoolclass.name}}</span></li>
@@ -23,8 +21,8 @@
                 </div>
             </div>
         </div>
-        <div class="col-8">
-            <div class="table-responsive">
+        <div class="col-lg-6 d-flex align-items-center justify-content-center">
+            <div class="table-responsive d-none d-md-flex">
                 <table class="table table-hover text-center table-bordered border-dark">
                     <thead>
                         <th colspan="5">Légende des compétences</th>
@@ -47,39 +45,84 @@
                     </tbody>
                 </table>
             </div>
+
+            <div class="accordion d-block d-md-none mt-2" id="accordionSkillKey">
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                        Voir la légende des compétences
+                    </button>
+                    </h2>
+                    <div id="collapseOne" class="accordion-collapse collapse" data-bs-parent="#accordionSkillKey">
+                        <div class="accordion-body">
+                            <div class="table-responsive">
+                                <table>
+                                    <tr>
+                                        <td><div class="skill-level skill-level0">0</div></td>
+                                        <td>Non maîtrisée</td>
+                                    </tr>
+                                    <tr>
+                                        <td><div class="skill-level skill-level1">1</div></td>
+                                        <td>Insuffisamment maîtrisée</td>
+                                    </tr>
+                                    <tr>
+                                        <td><div class="skill-level skill-level2">2</div></td>
+                                        <td>Fragilement maîtrisée</td>
+                                    </tr>
+                                    <tr>
+                                        <td><div class="skill-level skill-level3">3</div></td>
+                                        <td>Bien maîtrisée</td>
+                                    </tr>
+                                    <tr>
+                                        <td><div class="skill-level skill-level4">4</div></td>
+                                        <td>Très bien maîtrisée</td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
+    <div class="row pb-3">
+    <div class="table-responsive" style="max-height: 400px; overflow-y: auto;">
+        <table class="table table-bordered table-hover text-center align-middle">
+            <thead class="sticky-top bg-light">
+                <tr>
+                    <th scope="col" class="sticky-left bg-light">Nom de l'élève</th>
+                    <th scope="col">Editer</th>
+                    <th scope="col"><span class="compet1">Lect</span></th>
+                    <th scope="col"><span class="compet2">Conn</span></th>
+                    <th scope="col"><span class="compet3">Argu</span></th>
+                    <th scope="col"><span class="compet4">Ecrit</span></th>
+                    <th scope="col"><span class="compet5">Oral</span></th>
+                    <th scope="col">Note</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for student in students %}
+                <tr>
+                    <th scope="row" class="sticky-left bg-light">
+                        <a href="/showstudent{{student['student'].id}}">
+                            <span class="text-uppercase">{{student['student'].lastname}}</span> {{student['student'].firstname}}
+                        </a>
+                    </th>
+                    <td><a href="/addskills/test={{testInfo.id}}/student={{student['student'].id}}" class="btn btn-primary">Editer</a></td>
+                    <td><span class="skill-level skill-level{{student['skills']['skill1']}}">{{student['skills']['skill1']}}</span></td>
+                    <td><span class="skill-level skill-level{{student['skills']['skill2']}}">{{student['skills']['skill2']}}</span></td>
+                    <td><span class="skill-level skill-level{{student['skills']['skill3']}}">{{student['skills']['skill3']}}</span></td>
+                    <td><span class="skill-level skill-level{{student['skills']['skill4']}}">{{student['skills']['skill4']}}</span></td>
+                    <td><span class="skill-level skill-level{{student['skills']['skill5']}}">{{student['skills']['skill5']}}</span></td>
+                    <td>{{student['mark']}}/{{testInfo.scale}}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
 
-    <table class="table table-bordered table-hover text-center table align-middle">
-                <thead>
-                    <tr>
-                        <th scope="col">Nom de l'élève</th>
-                        <th>Editer</th>
-                        <th scope="col"><span class="compet1">Lecture</span></th>
-                        <th scope="col"><span class="compet2">Connaissances</span></th>
-                        <th scope="col"><span class="compet3">Argumentation</span></th>
-                        <th scope="col"><span class="compet4">Ecrit</span></th>
-                        <th scope="col"><span class="compet5">Oral</span></th>
-                        <th scope="col">Note</th>
 
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for student in students %}
-                    <tr>
-                        <th scope="row"><a href="/showstudent{{student['student'].id}}"><span class="text-uppercase">{{student['student'].lastname}}</span> {{student['student'].firstname}}</a></th>
-                        <td> <a href="/addskills/test={{testInfo.id}}/student={{student['student'].id}}" class="btn btn-primary">Editer</a></td>
-                        <td><span class="skill-level skill-level{{student['skills']['skill1']}}">{{student['skills']['skill1']}}</span></td>
-                        <td><span class="skill-level skill-level{{student['skills']['skill2']}}">{{student['skills']['skill2']}}</span></td>
-                        <td><span class="skill-level skill-level{{student['skills']['skill3']}}">{{student['skills']['skill3']}}</span></td>
-                        <td><span class="skill-level skill-level{{student['skills']['skill4']}}">{{student['skills']['skill4']}}</span></td>
-                        <td><span class="skill-level skill-level{{student['skills']['skill5']}}">{{student['skills']['skill5']}}</span></td>
-                        <td>{{student['mark']}} / {{testInfo.scale}}</td>
-                    </tr>
-                    {% endfor %}   
-                </tbody>
-            </table>
-        </form>
 
  
 </div>

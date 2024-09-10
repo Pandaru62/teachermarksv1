@@ -1,33 +1,43 @@
 {% extends 'base.html.twig' %}
 
+
 {% block title %}Teachermarks - fiche élève {% endblock %}
 
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('build/chart.js') }}" defer></script>
+{% endblock %}
 
 
 {% block body %}
 
 <div class="container-fluid px-3">
-    <div class="row row-cols-1">
+    <div class="row d-print-none">
         <div class="d-flex align-items-center justify-content-between pb-3">
-            <a href="/showstudent{{previousStudent['id']}}"" class="btn btn-success"><i class="bi bi-arrow-left"></i> <span class="text-uppercase">{{previousStudent['lastname']}}</span> {{previousStudent['firstname']}}</a>
+            <a href="/showstudent{{previousStudent['id']}}" class="btn btn-success">
+                <i class="bi bi-arrow-left"></i> <span class="text-uppercase">{{previousStudent['lastname']}}</span> {{previousStudent['firstname']}}
+            </a>
             <h1 class="text-center">Passeport élève ({{student.schoolclass.name}})</h1>
-            <a href="/showstudent{{nextStudent['id']}}" class="btn btn-success"><span class="text-uppercase">{{nextStudent['lastname']}}</span> {{nextStudent['firstname']}} <i class="bi bi-arrow-right"></i></a>
+            <a href="/showstudent{{nextStudent['id']}}" class="btn btn-success">
+                <span class="text-uppercase">{{nextStudent['lastname']}}</span> {{nextStudent['firstname']}} <i class="bi bi-arrow-right"></i>
+            </a>
         </div>
-        <div class="row pb-3">
+        <div class="row pb-3 align-items-center">
             <div class="col-lg-6">
                 <div class="bg-light rounded-5 p-3 d-flex justify-content-around align-items-center" id="student-info">
                     <ul>
                         <li>Nom : <span class="fw-bold text-uppercase">{{student.lastname}}</span></li>
                         <li>Prénom : <span class="fw-bold">{{student.firstname}}</span></li>
-                        <li>Classe : <span class="fw-bold">{{student.schoolclass.name}}</span></li>
+                        <li>Classe : <span class="fw-bold"><a href="/class/{{student.schoolclass.id}}">{{student.schoolclass.name}}</a></span></li>
                     </ul>
                     <div>
                         <a href="/editstudent/{{student.id}}" class="btn btn-outline-success"><i class="bi bi-pencil"></i> Editer l'élève</a>
                     </div>
                 </div>
             </div>
-            <div class="col-lg-6">
-                <div class="table-responsive d-none d-md-flex ">
+            <div class="col-lg-6 ">
+                <div class="table-responsive d-none d-md-flex">
                     <table class="table table-hover text-center table-bordered border-dark">
                         <thead>
                             <th colspan="5">Légende des compétences</th>
@@ -52,7 +62,7 @@
                 </div>
 
                 <div class="accordion d-block d-md-none mt-2" id="accordionSkillKey">
-                    <div class="accordion-item">
+                    <div class="accordion-item ">
                         <h2 class="accordion-header">
                         <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
                             Voir la légende des compétences
@@ -91,17 +101,69 @@
             </div> 
         </div>
     </div>
+
+    <!-- Part being printed -->
+
+    <div id="print-header" class="d-none d-print-grid pb-3 align-items-center">
+        <div class="row">
+            <div class="col-8">
+                <div class="bg-light rounded-5 p-3 d-flex justify-content-around align-items-center" id="student-info">
+                    <ul>
+                        <li class="pb-2"><h1>Compétences de français</h1></li>
+                        <li>Nom : <span class="fw-bold text-uppercase">{{student.lastname}}</span></li>
+                        <li>Prénom : <span class="fw-bold">{{student.firstname}}</span></li>
+                        <li>Classe : <span class="fw-bold">{{student.schoolclass.name}}</span></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-4">
+                <div class="table-responsive">
+                    <table>
+                        <tr>
+                            <td><div class="skill-level skill-level0">0</div></td>
+                            <td>Non maîtrisée</td>
+                        </tr>
+                        <tr>
+                            <td><div class="skill-level skill-level1">1</div></td>
+                            <td>Insuffisamment maîtrisée</td>
+                        </tr>
+                        <tr>
+                            <td><div class="skill-level skill-level2">2</div></td>
+                            <td>Fragilement maîtrisée</td>
+                        </tr>
+                        <tr>
+                            <td><div class="skill-level skill-level3">3</div></td>
+                            <td>Bien maîtrisée</td>
+                        </tr>
+                        <tr>
+                            <td><div class="skill-level skill-level4">4</div></td>
+                            <td>Très bien maîtrisée</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="row">
 
         <div class="pb-3">
-            <h2>Suivi des évaluations</h2>
+            <div class="d-flex justify-content-between">
+                <div>
+                    <h2>Suivi des évaluations</h2>
+                </div>
+                <div class="fs-2 d-print-none" id="exportButtons">
+                    <button onClick="#" class="btn btn-secondary d-none"><i class="bi bi-file-earmark-pdf"></i></button>
+                    <button onClick="window.print()" class="btn btn-secondary"><i class="bi bi-printer"></i></button>
+                </div>
+            </div>
 
-            <div class="table-responsive">
-                <table class="table table-hover text-center align-middle">
-                    <thead>
+            <div class="table-responsive" id="table-eval-suivi">
+                <table class="table-border-print table table-hover text-center align-middle">
+                    <thead class="sticky-top bg-light align-middle">
                         <tr>
                             <th scope="col"></th>
-                            <th scope="col">Trimestre</th>
+                            <th scope="col">Tr<span class="d-print-none">imestre</span></th>
                             <th scope="col">Date</th>
                             <th scope="col"><span class="compet1">Lect.</span></th>
                             <th scope="col"><span class="compet2">Conn.</span></th>
@@ -114,15 +176,15 @@
                     <tbody>
                         {% for studentTest in studentTests %}
                         <tr>
-                            <th scope="row"><a href="seeskills/{{studentTest.test.id}}">{{studentTest.test.description}}</a></th>
-                            <td>TR {{studentTest.test.trimester}}</td>
+                            <th scope="row"><a class="eval-link" href="seeskills/{{studentTest.test.id}}">{{studentTest.test.description}}</a></th>
+                            <td>TR{{studentTest.test.trimester}}</td>
                             <td>{{studentTest.test.date|date('d/m/Y')}}</td>
                             <td><div class="skill-level skill-level{{studentTest.skill1}}">{{studentTest.skill1}}</div></td>
                             <td><div class="skill-level skill-level{{studentTest.skill2}}">{{studentTest.skill2}}</div></td>
                             <td><div class="skill-level skill-level{{studentTest.skill3}}">{{studentTest.skill3}}</div></td>
                             <td><div class="skill-level skill-level{{studentTest.skill4}}">{{studentTest.skill4}}</div></td>
                             <td><div class="skill-level skill-level{{studentTest.skill5}}">{{studentTest.skill5}}</div></td>
-                            <td>{{studentTest.mark}} / {{studentTest.test.scale}}</td>
+                            <td>{{studentTest.mark}}/{{studentTest.test.scale}}</td>
                         </tr>
                         {% endfor %}
                     </tbody>
@@ -131,12 +193,13 @@
 
         </div>
 
-        <h2>Récapitulatif trimestriel</h2>
+        <div class="pagebreak"></div>
 
         <div class="row pb-3">
-            <div class="col-lg-6">
+            <h2>Récapitulatif trimestriel</h2>
+            <div class="col-lg-8">
                 <div class="table-responsive">
-                    <table class="table table-hover text-center align-middle">
+                    <table class="table-border-print table table-hover text-center align-middle">
                         <thead>
                             <tr>
                                 <th scope="col"></th>
@@ -275,11 +338,10 @@
                     </table> 
                 </div> 
             </div>
-            <div class="offset-lg-1 col-lg-5 d-flex justify-content-center align-items-center rounded-5" id="studentChart">
+            <div class="offset-lg-1 col-lg-3 d-flex justify-content-center align-items-center rounded-5" id="studentChart">
                 <canvas id="myChart" width="400" height="400"></canvas>
                 <script type="application/json" id="chartData">{{ chartData|raw }}</script>
                 <script type="application/json" id="chartOptions">{{ chartOptions|raw }}</script>
-                <script src="{{ asset('build/app.js') }}"></script>
             </div>
             
         </div>
@@ -287,4 +349,5 @@
 </div>
 
 {% endblock %}
+
 

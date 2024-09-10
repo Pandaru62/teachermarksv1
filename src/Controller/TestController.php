@@ -28,10 +28,24 @@ class TestController extends AbstractController
     public function seeTests(): Response
     {
 
-        $tests = $this->testRepository->findBy([], ['id' => 'DESC']);
+        $tests = $this->testRepository->findBy([], ['date' => 'DESC']);
+
+        // Group tests by class
+
+        $testsByClass = [];
+    foreach ($tests as $test) {
+        $classColor = $test->getSchoolclass()->getColor();
+        $className = $test->getSchoolclass()->getName(); 
+        if (!isset($testsByClass[$className])) {
+            $testsByClass[$className] = [];
+        }
+        $testsByClass[$className]['tests'][] = $test;
+        $testsByClass[$className]['color'] = $classColor;
+    }
         
+        // dd($testsByClass);
         return $this->render('tests/show.html.twig', [
-            'tests' => $tests,
+            'tests' => $tests, 'testsByClass' => $testsByClass
         ]);
     }
 

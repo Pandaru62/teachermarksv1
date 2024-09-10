@@ -16,9 +16,16 @@
 
 /* Passeport élève */
 
+.contrast-text {
+    color: white; /* Default text color */
+    filter: brightness(0) invert(1); /* Adjusts text color to maintain contrast */
+}
+
 #student-info ul {
     list-style: none;
     font-size: 1.1em;
+    padding-left: 0;
+    margin-bottom: 0;
 }
 
 .compet1 {
@@ -100,4 +107,36 @@
 
 .equal-width-table th, .equal-width-table td {
     width: calc(100% / 7);
+}
+
+
+@media screen {
+    #table-eval-suivi {
+        max-height: 400px;
+        overflow-y: auto;
+    }
+}
+
+@media print {
+
+    * {
+        font-size: 0.9rem;
+    }
+
+    h2 {
+        text-decoration: underline;
+        font-weight: 700;
+    }
+
+    .eval-link {
+        color: black !important;
+        text-decoration: none !important;
+        font-weight: 700 !important;
+    }
+
+    .table-border-print, .table-border-print thead, .table-border-print  th, .table-border-print td {
+        border: 1px black solid !important;
+    }
+
+    .pagebreak { page-break-before: always; }
 }

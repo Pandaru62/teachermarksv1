@@ -13,7 +13,7 @@
             <label for="studentListTextarea">NOM Prénom</label>
         </div>
 
-        <button id="sendlist" type="submit" class="btn btn-primary mt-3">Envoyer</button>
+        <button id="sendlist" type="submit" class="btn btn-primary mt-3">Soumettre et vérifier</button>
     </form>
 
     <form id="add-students-form" method="POST" action="/registermany/{{schoolClass.id}}" class="d-none">
@@ -36,6 +36,8 @@
 </div>
 
 <script>
+
+    const schoolClassId = {{ schoolClass.id }};
     // Get the list from the textarea
     const sendButton = document.getElementById('sendlist');
     const studentListTextArea = document.getElementById('studentListTextarea');
@@ -79,7 +81,6 @@
         const formData = new FormData(addStudentsForm);
         const data = [];
 
-        // Collect data from form fields
         for (let i = 0; i < formData.getAll('first-name[]').length; i++) {
             data.push({
                 last_name: formData.getAll('last-name[]')[i],
@@ -95,13 +96,21 @@
             },
             body: JSON.stringify(data)
         })
-        .then(response => response.json())
-        .then(result => {
-            console.log('Success:', result);
+        .then(response => {
+            return response.text(); // Get the response as text first
+        })
+        .then(text => {
+            try {
+                const result = JSON.parse(text); // Try to parse JSON
+                window.location.href = `/class/${schoolClassId}`;
+            } catch (e) {
+                console.error('Failed to parse JSON:', e);
+            }
         })
         .catch(error => {
             console.error('Error:', error);
         });
     });
+
 </script>
 {% endblock %}

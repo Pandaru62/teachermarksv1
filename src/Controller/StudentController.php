@@ -19,8 +19,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
-// use Symfony\UX\Chartjs\Builder\ChartBuilderInterface;
-// use Symfony\UX\Chartjs\Model\Chart;
 
 class StudentController extends AbstractController
 {
@@ -45,7 +43,7 @@ class StudentController extends AbstractController
             $this->em->persist($newStudent);
             $this->em->flush();
 
-            return $this->redirectToRoute('app_class');
+            return $this->redirectToRoute('showClass', ['classid' => $newStudent->getSchoolclass()->getId()]);
 
         }
 
@@ -67,8 +65,8 @@ class StudentController extends AbstractController
     #[Route('/registermany/{classid}', name: 'register_many_students')]
     public function registerMany(Request $request, $classid): Response
     {
-
         $schoolClass = $this->em->getRepository(Schoolclass::class)->find($classid);
+
         $data = json_decode($request->getContent(), true);
 
         if (!$data) {
@@ -80,14 +78,16 @@ class StudentController extends AbstractController
             $student->setLastname($studentData['last_name'] ?? '');
             $student->setFirstname($studentData['first_name'] ?? '');
             $student->setSchoolclass($schoolClass);
-            
+
             $this->em->persist($student);
         }
 
         $this->em->flush();
 
-        return $this->redirectToRoute('showClass', ['classid' => $schoolClass->getId()]);
+        // Return a valid JSON response
+        return new JsonResponse(['status' => 'success', 'message' => 'Students added successfully']);
     }
+
 
 
 
@@ -331,7 +331,7 @@ class StudentController extends AbstractController
     
             if ($form->isSubmitted() && $form->isValid()) {
                 $this->em->flush();
-                return $this->redirectToRoute('app_class');
+                return $this->redirectToRoute('showClass', ['classid' => $student->getSchoolclass()->getId()]);
             }
     
             return $this->render('student/editstudent.html.twig', [
@@ -347,7 +347,7 @@ class StudentController extends AbstractController
             $this->em->remove($student);
             $this->em->flush();
 
-            return $this->redirectToRoute('app_class');
+            return $this->redirectToRoute('showClass', ['classid' => $student->getSchoolclass()->getId()]);
         }
     }
     

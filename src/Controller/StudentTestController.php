@@ -54,10 +54,10 @@ class StudentTestController extends AbstractController
             foreach ($skills as $skill) {
                 $studentSkills[$skill] = !empty($studentResults) && !empty($studentResults[0]->{'get' . ucfirst($skill)}())
                     ? $studentResults[0]->{'get' . ucfirst($skill)}()
-                    : '?';
+                    : 'x';
             }
 
-            $mark = !empty($studentResults) ? $studentResults[0]->getMark() : '?';
+            $mark = !empty($studentResults) ? $studentResults[0]->getMark() : 'x';
 
             $studentData[] = [
                 'student' => $student,
