@@ -32,8 +32,36 @@ class ClassController extends AbstractController
         'isArchived' => 0
         ]);
 
+        function isDarkBackground($hexColor) {
+            // Remove the '#' if present
+            $hexColor = str_replace('#', '', $hexColor);
+        
+            // Convert hex to RGB
+            $r = hexdec(substr($hexColor, 0, 2));
+            $g = hexdec(substr($hexColor, 2, 2));
+            $b = hexdec(substr($hexColor, 4, 2));
+        
+            // Calculate luminance
+            $luminance = ($r * 0.299 + $g * 0.587 + $b * 0.114);
+        
+            // Return "light" if the background is dark, "dark" otherwise
+            return $luminance < 128 ? "light" : "dark";
+        }
+        
+        $classTextColor = [];
+
+        // Process active classes
+        foreach ($activeClasses as $class) {
+            $classTextColor[$class->getName()] = isDarkBackground($class->getColor());
+        }
+    
+        // Process archived classes
+        foreach ($archivedClasses as $class) {
+            $classTextColor[$class->getName()] = isDarkBackground($class->getColor());
+        }
+
         return $this->render('class/showall.html.twig', [
-            'archivedClasses' => $archivedClasses, 'activeClasses' => $activeClasses
+            'archivedClasses' => $archivedClasses, 'activeClasses' => $activeClasses, 'classTextColor' => $classTextColor
         ]);
     }
 

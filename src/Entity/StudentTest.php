@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Entity\Test;
 use App\Repository\StudentTestRepository;
+use Doctrine\DBAL\Types\DecimalType;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: StudentTestRepository::class)]
@@ -21,8 +22,8 @@ class StudentTest
     #[ORM\ManyToOne(targetEntity: Test::class, inversedBy: 'studentTests')]
     #[ORM\JoinColumn(name: 'test_id', referencedColumnName: 'id', nullable: false)]    private ?Test $test = null;
 
-    #[ORM\Column]
-    private ?int $mark = null;
+    #[ORM\Column(type: 'decimal', precision: 2, scale: 2, nullable: true)]
+    private ?string $mark = null;
 
     #[ORM\Column(nullable: true)]
     private ?int $skill1 = null;

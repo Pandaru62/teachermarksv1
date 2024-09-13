@@ -21,6 +21,10 @@
     filter: brightness(0) invert(1); /* Adjusts text color to maintain contrast */
 }
 
+.list-group-item.active {
+    border: none;
+}
+
 #student-info ul {
     list-style: none;
     font-size: 1.1em;
@@ -62,7 +66,7 @@
     padding: 8px 8px;
     text-transform:uppercase;
     border-radius: 8px;
-    color: white;
+    color: black;
 }
 
 .compet5 {
@@ -103,6 +107,7 @@
 
 .skill-level4 {
     background-color: #319740;
+    color: white;
 }
 
 .equal-width-table th, .equal-width-table td {

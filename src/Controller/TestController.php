@@ -28,22 +28,39 @@ class TestController extends AbstractController
     public function seeTests(): Response
     {
 
+        function isDarkBackground($hexColor) {
+            // Remove the '#' if present
+            $hexColor = str_replace('#', '', $hexColor);
+        
+            // Convert hex to RGB
+            $r = hexdec(substr($hexColor, 0, 2));
+            $g = hexdec(substr($hexColor, 2, 2));
+            $b = hexdec(substr($hexColor, 4, 2));
+        
+            // Calculate luminance
+            $luminance = ($r * 0.299 + $g * 0.587 + $b * 0.114);
+        
+            // Return "light" if the background is dark, "dark" otherwise
+            return $luminance < 128 ? "light" : "dark";
+        }
+        
         $tests = $this->testRepository->findBy([], ['date' => 'DESC']);
 
         // Group tests by class
 
         $testsByClass = [];
-    foreach ($tests as $test) {
-        $classColor = $test->getSchoolclass()->getColor();
-        $className = $test->getSchoolclass()->getName(); 
-        if (!isset($testsByClass[$className])) {
-            $testsByClass[$className] = [];
+
+        foreach ($tests as $test) {
+            $classColor = $test->getSchoolclass()->getColor();
+            $className = $test->getSchoolclass()->getName(); 
+            if (!isset($testsByClass[$className])) {
+                $testsByClass[$className] = [];
+            }
+            $testsByClass[$className]['tests'][] = $test;
+            $testsByClass[$className]['color'] = $classColor;
+            $testsByClass[$className]['colortext'] = isDarkBackground($classColor);
         }
-        $testsByClass[$className]['tests'][] = $test;
-        $testsByClass[$className]['color'] = $classColor;
-    }
         
-        // dd($testsByClass);
         return $this->render('tests/show.html.twig', [
             'tests' => $tests, 'testsByClass' => $testsByClass
         ]);
@@ -73,7 +90,7 @@ class TestController extends AbstractController
         ]);
     }
 
-    #[Route('/edittest/{testid}', methods: ['GET'], name: 'edit_test')]
+    #[Route('/edittest/{testid}', methods: ['GET', 'POST'], name: 'edit_test')]
     public function editTest($testid, Request $request): Response
     {
 
@@ -87,7 +104,7 @@ class TestController extends AbstractController
             $test->setDate($form->get('date')->getData());
             $test->setTrimester($form->get('trimester')->getData());
             $test->setScale($form->get('scale')->getData());
-            $test->setCoefficiemt($form->get('coefficient')->getData());
+            $test->setCoefficient($form->get('coefficient')->getData());
             $test->setSchoolclass($form->get('schoolclass')->getData());
 
             $this->em->flush();

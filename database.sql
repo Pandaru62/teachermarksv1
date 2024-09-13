@@ -1,11 +1,67 @@
-CREATE TABLE form (id INT AUTO_INCREMENT NOT NULL, name VARCHAR(255) NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB;
-CREATE TABLE schoolclass (id INT AUTO_INCREMENT NOT NULL, form_id INT NOT NULL, name VARCHAR(255) NOT NULL, color VARCHAR(255) NOT NULL, is_archived TINYINT(1) NOT NULL, INDEX IDX_F146B6695FF69B7D (form_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB;
-CREATE TABLE students (id INT AUTO_INCREMENT NOT NULL, class_id INT NOT NULL, lastname VARCHAR(255) NOT NULL, firstname VARCHAR(255) NOT NULL, INDEX IDX_A4698DB2EA000B10 (class_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB;
-CREATE TABLE test (id INT AUTO_INCREMENT NOT NULL, schoolclass_id INT NOT NULL, date DATE NOT NULL, trimester INT NOT NULL, description VARCHAR(255) NOT NULL, scale INT NOT NULL, coefficient INT NOT NULL, INDEX IDX_D87F7E0CC67D8F5 (schoolclass_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB;
-CREATE TABLE user (id INT AUTO_INCREMENT NOT NULL, username VARCHAR(180) NOT NULL, roles JSON NOT NULL, password VARCHAR(255) NOT NULL, UNIQUE INDEX UNIQ_IDENTIFIER_USERNAME (username), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB;
-ALTER TABLE schoolclass ADD CONSTRAINT FK_F146B6695FF69B7D FOREIGN KEY (form_id) REFERENCES form (id);
-ALTER TABLE students ADD CONSTRAINT FK_A4698DB2EA000B10 FOREIGN KEY (class_id) REFERENCES schoolclass (id);
-ALTER TABLE test ADD CONSTRAINT FK_D87F7E0CC67D8F5 FOREIGN KEY (schoolclass_id) REFERENCES schoolclass (id);
+CREATE TABLE form (
+    id INT AUTO_INCREMENT NOT NULL,
+    name VARCHAR(255) NOT NULL,
+    PRIMARY KEY(id)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB;
+
+CREATE TABLE schoolclass (
+    id INT AUTO_INCREMENT NOT NULL,
+    form_id INT NOT NULL,
+    name VARCHAR(255) NOT NULL,
+    color VARCHAR(255) NOT NULL,
+    is_archived TINYINT(1) NOT NULL,
+    INDEX IDX_F146B6695FF69B7D (form_id),
+    PRIMARY KEY(id),
+    CONSTRAINT FK_F146B6695FF69B7D FOREIGN KEY (form_id) REFERENCES form (id) ON DELETE CASCADE
+) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB;
+
+CREATE TABLE students (
+    id INT AUTO_INCREMENT NOT NULL,
+    class_id INT NOT NULL,
+    lastname VARCHAR(255) NOT NULL,
+    firstname VARCHAR(255) NOT NULL,
+    INDEX IDX_A4698DB2EA000B10 (class_id),
+    PRIMARY KEY(id),
+    CONSTRAINT FK_A4698DB2EA000B10 FOREIGN KEY (class_id) REFERENCES schoolclass (id) ON DELETE CASCADE
+) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB;
+
+CREATE TABLE test (
+    id INT AUTO_INCREMENT NOT NULL,
+    schoolclass_id INT NOT NULL,
+    date DATE NOT NULL,
+    trimester INT NOT NULL,
+    description VARCHAR(255) NOT NULL,
+    scale INT NOT NULL,
+    coefficient INT NOT NULL,
+    INDEX IDX_D87F7E0CC67D8F5 (schoolclass_id),
+    PRIMARY KEY(id),
+    CONSTRAINT FK_D87F7E0CC67D8F5 FOREIGN KEY (schoolclass_id) REFERENCES schoolclass (id) ON DELETE CASCADE
+) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB;
+
+CREATE TABLE user (
+    id INT AUTO_INCREMENT NOT NULL,
+    username VARCHAR(180) NOT NULL,
+    roles JSON NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    UNIQUE INDEX UNIQ_IDENTIFIER_USERNAME (username),
+    PRIMARY KEY(id)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB;
+
+CREATE TABLE `student_test` (
+    `id` int(11) NOT NULL AUTO_INCREMENT,
+    `student_id` int(11) NOT NULL,
+    `test_id` int(11) NOT NULL,
+    `mark` DECIMAL(5,2) NOT NULL,
+    `skill1` int(11) DEFAULT NULL,
+    `skill2` int(11) DEFAULT NULL,
+    `skill3` int(11) DEFAULT NULL,
+    `skill4` int(11) DEFAULT NULL,
+    `skill5` int(11) DEFAULT NULL,
+    PRIMARY KEY(`id`),
+    CONSTRAINT `FK_E75C05D41E5D0459` FOREIGN KEY (`test_id`) REFERENCES `test` (`id`) ON DELETE CASCADE,
+    CONSTRAINT `FK_E75C05D4CB944F1A` FOREIGN KEY (`student_id`) REFERENCES `students` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
 
 INSERT INTO `user` (`username`, `roles`, `password`) VALUES ('a_pierrepont', '[]', '$2y$13$f8wB7blFJ.hBfvbo/YKAuuiJFn2QHakIYYw2ChZmtwK240kRF9iJy');
 
@@ -40,27 +96,6 @@ VALUES
 ('Paul', 'Martinez', 3),
 ('Quinn', 'Robinson', 4),
 ('Ruby', 'Clark', 5);
-
-CREATE TABLE `student_test` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `student_id` int(11) NOT NULL,
-  `test_id` int(11) NOT NULL,
-  `mark` int(11) NOT NULL,
-  `skill1` int(11) DEFAULT NULL,
-  `skill2` int(11) DEFAULT NULL,
-  `skill3` int(11) DEFAULT NULL,
-  `skill4` int(11) DEFAULT NULL,
-  `skill5` int(11) DEFAULT NULL,
-  PRIMARY KEY(`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
-ALTER TABLE `student_test`
-  ADD KEY `IDX_E75C05D4CB944F1A` (`student_id`),
-  ADD KEY `IDX_E75C05D41E5D0459` (`test_id`);
-  
-ALTER TABLE `student_test`
-  ADD CONSTRAINT `FK_E75C05D41E5D0459` FOREIGN KEY (`test_id`) REFERENCES `test` (`id`),
-  ADD CONSTRAINT `FK_E75C05D4CB944F1A` FOREIGN KEY (`student_id`) REFERENCES `students` (`id`);
 
 INSERT INTO `test` (`id`, `schoolclass_id`, `date`, `trimester`, `description`, `scale`, `coefficient`) VALUES
 (21, 1, '2024-01-15', 1, 'Math Test 1', 20, 1),
