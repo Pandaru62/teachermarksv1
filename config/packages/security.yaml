@@ -58,9 +58,9 @@ security:
         - { path: /addtest, roles: ROLE_USER }
         - { path: /edittest/, roles: ROLE_USER }
         - { path: /deletetest/, roles: ROLE_USER }
-
+        - { path: /addtestskills/, roles: ROLE_USER }
+        - { path: /update-student-tests/, roles: ROLE_USER }
         
-
 when@test:
     security:
         password_hashers:

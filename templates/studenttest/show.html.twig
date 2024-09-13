@@ -4,20 +4,27 @@
 
 {% block body %}
 
+<style>
+    .no-tick{
+        list-style-type: none;
+        padding-left: 0;
+    }
+</style>
+
 <div class="container-fluid px-3">
         <h1 class="text-center pb-3">Eval : <b>{{testInfo.description}}</b></h1>
     <div class="row pb-3">
         <div class="col-lg-6">
             <div class="bg-light rounded-5 p-3 d-flex justify-content-around align-items-center" id="test-info">
-                <ul>
+                <ul class="no-tick">
                     <li>Classe : <span class="fw-bold">{{testInfo.schoolclass.name}}</span></li>
                     <li>Date : <span class="fw-bold">{{testInfo.date|date('d/m/Y')}}</span></li>
                     <li>Trimestre : <span class="fw-bold">{{testInfo.trimester}}</span></li>
-                    <li>Barème : <span class="fw-bold">{{testInfo.scale}}</span></li>
+                    <li>Barème / <span class="fw-bold"> {{testInfo.scale}}</span></li>
                     <li>Coefficient : <span class="fw-bold">{{testInfo.coefficient}}</span></li>
                 </ul>
                 <div>
-                    <a href="/edittest/{{testInfo.id}}" class="btn btn-outline-success"><i class="bi bi-pencil"></i> Editer test</a>
+                    <a href="/edittest/{{testInfo.id}}" class="btn btn-primary"><i class="bi bi-gear"></i> Modifier les paramètres</a>
                 </div>
             </div>
         </div>
@@ -85,13 +92,15 @@
             </div>
         </div>
     </div>
+    <div class="d-flex justify-content-center py-3">
+        <a href="/addtestskills/test={{testInfo.id}}" class="btn btn-warning btn-lg"><i class="bi bi-pencil"></i> Modifier les compétences des élèves</a>
+    </div>
     <div class="row pb-3">
     <div class="table-responsive" style="max-height: 400px; overflow-y: auto;">
         <table class="table table-bordered table-hover text-center align-middle">
-            <thead class="sticky-top bg-light">
+            <thead class="sticky-top bg-light align-middle">
                 <tr>
                     <th scope="col" class="sticky-left bg-light">Nom de l'élève</th>
-                    <th scope="col">Editer</th>
                     <th scope="col"><span class="compet1">Lect</span></th>
                     <th scope="col"><span class="compet2">Conn</span></th>
                     <th scope="col"><span class="compet3">Argu</span></th>
@@ -108,7 +117,6 @@
                             <span class="text-uppercase">{{student['student'].lastname}}</span> {{student['student'].firstname}}
                         </a>
                     </th>
-                    <td><a href="/addskills/test={{testInfo.id}}/student={{student['student'].id}}" class="btn btn-primary">Editer</a></td>
                     <td><span class="skill-level skill-level{{student['skills']['skill1']}}">{{student['skills']['skill1']}}</span></td>
                     <td><span class="skill-level skill-level{{student['skills']['skill2']}}">{{student['skills']['skill2']}}</span></td>
                     <td><span class="skill-level skill-level{{student['skills']['skill3']}}">{{student['skills']['skill3']}}</span></td>

@@ -114,6 +114,13 @@
     width: calc(100% / 7);
 }
 
+/* editing skills page */
+
+.input-skill {
+    width: auto;
+    min-width: 100px;
+}
+
 
 @media screen {
     #table-eval-suivi {
