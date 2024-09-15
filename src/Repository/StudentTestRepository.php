@@ -16,28 +16,14 @@ class StudentTestRepository extends ServiceEntityRepository
         parent::__construct($registry, StudentTest::class);
     }
 
-//    /**
-//     * @return StudentTest[] Returns an array of StudentTest objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('s')
-//            ->andWhere('s.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('s.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
-
-//    public function findOneBySomeField($value): ?StudentTest
-//    {
-//        return $this->createQueryBuilder('s')
-//            ->andWhere('s.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+    public function findByTestOrderedByStudentLastname($testid)
+    {
+        return $this->createQueryBuilder('st')
+            ->join('st.student', 's')
+            ->where('st.test = :testid')
+            ->setParameter('testid', $testid)
+            ->orderBy('s.lastname', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
 }

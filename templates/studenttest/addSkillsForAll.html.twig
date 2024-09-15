@@ -2,6 +2,10 @@
 
 {% block title %}Teachermarks - Editer compétences {% endblock %}
 
+{% block javascripts %}
+    {{ encore_entry_script_tags('eval') }}
+{% endblock %}
+
 {% block body %}
 
 <div class="container-fluid px-3">
@@ -154,11 +158,11 @@
                     <thead class="align-middle">
                         <tr>
                             <th scope="col">Elève</th>
-                            <th scope="col"><span class="compet1">Lect</span></th>
-                            <th scope="col"><span class="compet2">Connaiss</span></th>
-                            <th scope="col"><span class="compet3">Argu</span></th>
-                            <th scope="col"><span class="compet4">Ecrit</span></th>
-                            <th scope="col"><span class="compet5">Oral</span></th>
+                            <th scope="col" class="td-skill1"><span class="compet1">Lect</span></th>
+                            <th scope="col" class="td-skill2"><span class="compet2">Connaiss</span></th>
+                            <th scope="col" class="td-skill3"><span class="compet3">Argu</span></th>
+                            <th scope="col" class="td-skill4"><span class="compet4">Ecrit</span></th>
+                            <th scope="col" class="td-skill5"><span class="compet5">Oral</span></th>
                             <th scope="col" colspan="2">Note</th>
                         </tr>                      
                     </thead>
@@ -191,7 +195,7 @@
                                 </td>
                                 <td class="text-right td-mark">
                                     <label for="mark-{{ studentTest.id }}" class="form-label d-none">Skill 1 (ID: {{ studentTest.id }})</label>
-                                    <input id="mark-{{ studentTest.id }}" name="studentTests[{{ studentTest.id }}][mark]" class="form-control input-skill" type="number" min="0" max="20" value="{{ studentTest.mark }}">
+                                    <input id="mark-{{ studentTest.id }}" name="studentTests[{{ studentTest.id }}][mark]" class="form-control input-skill" type="number" min="0" max="20" step="0.25" value="{{ studentTest.mark }}">
                                 </td>
                                 <td class="text-start">
                                     /{{ testInfo.scale }}
@@ -208,26 +212,26 @@
 
 </div>
 
-
+{# <script src="{{asset("eval-page.js")}}"></script> #}
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        // Add event listeners to each checkbox
-        document.querySelectorAll('#skillsForm input[type="checkbox"]').forEach(function (checkbox) {
-            checkbox.addEventListener('change', function () {
-                const skillClass = '.td-' + this.id; // e.g., .td-skill1 for skill-1
-                document.querySelectorAll(skillClass).forEach(function (td) {
-                    if (checkbox.checked) {
-                        td.classList.remove('d-none');
-                    } else {
-                        td.classList.add('d-none');
-                    }
-                });
-            });
-        });
-    });
+    // document.addEventListener('DOMContentLoaded', function () {
+    // // Add event listeners to each checkbox
+    //     document.querySelectorAll('#skillsForm input[type="checkbox"]').forEach(function (checkbox) {
+    //         checkbox.addEventListener('change', function () {
+    //             // Replace the hyphen in the checkbox ID to match the column class format
+    //             const skillClass = '.td-' + this.id.replace('-', '');
+                
+    //             document.querySelectorAll(skillClass).forEach(function (td) {
+    //                 if (checkbox.checked) {
+    //                     td.classList.remove('d-none');
+    //                 } else {
+    //                     td.classList.add('d-none');
+    //                 }
+    //             });
+    //         });
+    //     });
+    // });
 </script>
-
-
 
 {% endblock %}
 

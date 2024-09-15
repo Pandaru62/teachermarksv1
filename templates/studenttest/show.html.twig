@@ -17,7 +17,7 @@
         <div class="col-lg-6">
             <div class="bg-light rounded-5 p-3 d-flex justify-content-around align-items-center" id="test-info">
                 <ul class="no-tick">
-                    <li>Classe : <span class="fw-bold">{{testInfo.schoolclass.name}}</span></li>
+                    <li>Classe : <a href="/class/{{testInfo.schoolclass.id}}"><span class="fw-bold">{{testInfo.schoolclass.name}}</span></a></li>
                     <li>Date : <span class="fw-bold">{{testInfo.date|date('d/m/Y')}}</span></li>
                     <li>Trimestre : <span class="fw-bold">{{testInfo.trimester}}</span></li>
                     <li>Barème / <span class="fw-bold"> {{testInfo.scale}}</span></li>
@@ -96,44 +96,71 @@
         <a href="/addtestskills/test={{testInfo.id}}" class="btn btn-warning btn-lg"><i class="bi bi-pencil"></i> Modifier les compétences des élèves</a>
     </div>
     <div class="row pb-3">
-    <div class="table-responsive" style="max-height: 400px; overflow-y: auto;">
-        <table class="table table-bordered table-hover text-center align-middle">
-            <thead class="sticky-top bg-light align-middle">
-                <tr>
-                    <th scope="col" class="sticky-left bg-light">Nom de l'élève</th>
-                    <th scope="col"><span class="compet1">Lect</span></th>
-                    <th scope="col"><span class="compet2">Conn</span></th>
-                    <th scope="col"><span class="compet3">Argu</span></th>
-                    <th scope="col"><span class="compet4">Ecrit</span></th>
-                    <th scope="col"><span class="compet5">Oral</span></th>
-                    <th scope="col">Note</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for student in students %}
-                <tr>
-                    <th scope="row" class="sticky-left bg-light">
-                        <a href="/showstudent{{student['student'].id}}">
-                            <span class="text-uppercase">{{student['student'].lastname}}</span> {{student['student'].firstname}}
-                        </a>
-                    </th>
-                    <td><span class="skill-level skill-level{{student['skills']['skill1']}}">{{student['skills']['skill1']}}</span></td>
-                    <td><span class="skill-level skill-level{{student['skills']['skill2']}}">{{student['skills']['skill2']}}</span></td>
-                    <td><span class="skill-level skill-level{{student['skills']['skill3']}}">{{student['skills']['skill3']}}</span></td>
-                    <td><span class="skill-level skill-level{{student['skills']['skill4']}}">{{student['skills']['skill4']}}</span></td>
-                    <td><span class="skill-level skill-level{{student['skills']['skill5']}}">{{student['skills']['skill5']}}</span></td>
-                    <td>{{student['mark']}}/{{testInfo.scale}}</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+        <div class="table-responsive" style="max-height: 400px; overflow-y: auto;">
+            <table class="table table-bordered table-hover text-center align-middle">
+                <thead class="sticky-top bg-light align-middle">
+                    <tr>
+                        <th scope="col" class="sticky-left bg-light">Nom de l'élève</th>
+                        {% if showSkill1 %}<th scope="col"><span class="compet1">Lect</span></th>{% endif %}
+                        {% if showSkill2 %}<th scope="col"><span class="compet2">Conn</span></th>{% endif %}
+                        {% if showSkill3 %}<th scope="col"><span class="compet3">Argu</span></th>{% endif %}
+                        {% if showSkill4 %}<th scope="col"><span class="compet4">Ecrit</span></th>{% endif %}
+                        {% if showSkill5 %}<th scope="col"><span class="compet5">Oral</span></th>{% endif %}
+                        <th scope="col">Note</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for student in students %}
+                        <tr>
+                            <th scope="row" class="sticky-left bg-light">
+                                <a href="/showstudent{{student.student.id}}">
+                                    <span class="text-uppercase">{{student.student.lastname}}</span> {{student.student.firstname}}
+                                </a>
+                            </th>
+                            {% if showSkill1 %}
+                                <td>
+                                    <span class="{% if student.skill1 != 0 %}skill-level skill-level{{student.skill1}}{% endif %}">
+                                        {{ student.skill1 == 0 ? 'x' : student.skill1 }}
+                                    </span>
+                                </td>
+                            {% endif %}
+                            {% if showSkill2 %}
+                                <td>
+                                    <span class="{% if student.skill2 != 0 %}skill-level skill-level{{student.skill2}}{% endif %}">
+                                        {{ student.skill2 == 0 ? 'x' : student.skill2 }}
+                                    </span>
+                                </td>
+                            {% endif %}
+                            {% if showSkill3 %}
+                                <td>
+                                    <span class="{% if student.skill3 != 0 %}skill-level skill-level{{student.skill3}}{% endif %}">
+                                        {{ student.skill3 == 0 ? 'x' : student.skill3 }}
+                                    </span>
+                                </td>
+                            {% endif %}
+                            {% if showSkill4 %}
+                                <td>
+                                    <span class="{% if student.skill4 != 0 %}skill-level skill-level{{student.skill4}}{% endif %}">
+                                        {{ student.skill4 == 0 ? 'x' : student.skill4 }}
+                                    </span>
+                                </td>
+                            {% endif %}
+                            {% if showSkill5 %}
+                                <td>
+                                    <span class="{% if student.skill5 != 0 %}skill-level skill-level{{student.skill5}}{% endif %}">
+                                        {{ student.skill5 == 0 ? 'x' : student.skill5 }}
+                                    </span>
+                                </td>
+                            {% endif %}
+                            <td>{{ student.mark }}/{{ testInfo.scale }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
-
-
-
  
-</div>
 
 
 {% endblock %}

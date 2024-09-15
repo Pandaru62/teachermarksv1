@@ -69,12 +69,12 @@ class StudentTest
         return $this;
     }
 
-    public function getMark(): ?int
+    public function getMark(): ?float
     {
         return $this->mark;
     }
 
-    public function setMark(int $mark): static
+    public function setMark(float $mark): static
     {
         $this->mark = $mark;
 

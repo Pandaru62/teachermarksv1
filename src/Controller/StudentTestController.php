@@ -35,40 +35,42 @@ class StudentTestController extends AbstractController
 
     #[Route('/seeskills/{testid}', methods: ["GET"], name: 'see_skills')]
     public function seeSkills(int $testid): Response {
+
+        /* retrives info about the test */
         $testInfo = $this->testRepository->findOneBy(['id' => $testid]);
         if (!$testInfo) {
             throw $this->createNotFoundException('Test not found');
         }
 
-        $classId = $testInfo->getSchoolclass()->getId();
-        $students = $this->studentsRepository->findBy(['schoolclass' => $classId], ['lastname' => 'ASC']);
-        
-        $studentData = [];
+        $studentData = $this->studentTestRepository->findByTestOrderedByStudentLastname($testid);
 
-        foreach ($students as $student) {
-            $studentResults = $this->studentTestRepository->findBy(['student' => $student->getId(), 'test' => $testid]);
+        // Initialize skill visibility flags
+        $showSkill1 = false;
+        $showSkill2 = false;
+        $showSkill3 = false;
+        $showSkill4 = false;
+        $showSkill5 = false;
 
-            $skills = ['skill1', 'skill2', 'skill3', 'skill4', 'skill5'];
-            $studentSkills = [];
-
-            foreach ($skills as $skill) {
-                $studentSkills[$skill] = !empty($studentResults) && !empty($studentResults[0]->{'get' . ucfirst($skill)}())
-                    ? $studentResults[0]->{'get' . ucfirst($skill)}()
-                    : 'x';
-            }
-
-            $mark = !empty($studentResults) ? $studentResults[0]->getMark() : 'x';
-
-            $studentData[] = [
-                'student' => $student,
-                'skills' => $studentSkills,
-                'mark' => $mark,
-            ];
+        // Check if any student has a non-zero value for each skill
+        foreach ($studentData as $studentTest) {
+            if ($studentTest->getSkill1() != 0) $showSkill1 = true;
+            if ($studentTest->getSkill2() != 0) $showSkill2 = true;
+            if ($studentTest->getSkill3() != 0) $showSkill3 = true;
+            if ($studentTest->getSkill4() != 0) $showSkill4 = true;
+            if ($studentTest->getSkill5() != 0) $showSkill5 = true;
         }
+
         return $this->render('studenttest/show.html.twig', [
             'testInfo' => $testInfo,
             'students' => $studentData,
+            'showSkill1' => $showSkill1,
+            'showSkill2' => $showSkill2,
+            'showSkill3' => $showSkill3,
+            'showSkill4' => $showSkill4,
+            'showSkill5' => $showSkill5,
         ]);
+        
+        
     }
     
     /* OLD METHOD allows to edit skills for a test one student at a time */
@@ -138,8 +140,10 @@ class StudentTestController extends AbstractController
         );
 
         // Check for existing StudentTest entries
-        $studentTests = $this->studentTestRepository->findBy([
-            'test' => $testid]);
+        // $studentTests = $this->studentTestRepository->findBy([
+        //     'test' => $testid]);
+
+        $studentTests = $this->studentTestRepository->findByTestOrderedByStudentLastname($testid);
 
 
          // Check if any StudentTest entries exist
