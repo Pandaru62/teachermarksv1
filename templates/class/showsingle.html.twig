@@ -4,8 +4,8 @@
 
 {% block body %}
     <div class="container-fluid d-flex flex-column justify-content-center">
-        <div class="bg-secondary bg-opacity-25 m-5 p-3 rounded-3">
-            <div class="d-flex flex-column justify-content-around align-items-center">
+        <div class="bg-secondary bg-opacity-25 m-lg-5 p-3 rounded-3">
+            <div class="d-flex flex-column justify-content-around align-items-center py-3">
                 <h2>
                     Classe: 
                     <span class="p-1 rounded-2 fw-bolder {{ isDarkBackground ? 'text-light' : 'text-dark' }}" style="background-color: {{selectedClass.color}}">
@@ -22,7 +22,6 @@
                         <tr>
                             <th scope="col">Nom</th>
                             <th scope="col">Prénom</th>
-                            <th scope="col">Voir</th>
                             <th scope="col">Editer</th>
                             <th scope="col">Suppr.</th>
                         </tr>
@@ -31,23 +30,22 @@
 
                     {% for student in students %}
                         <tr class="">
-                            <td>{{ student.lastname }}</td>
-                            <td>{{ student.firstname }} </td>
-                            <td><a href="/showstudent{{ student.id }}" class="btn btn-success"><i class="bi bi-eye"></i></a></td>
+                            <td><a class="fw-bolder" href="/showstudent{{ student.id }}">{{ student.lastname }}</a></td>
+                            <td><a class="fw-bolder" href="/showstudent{{ student.id }}">{{ student.firstname }}</a></td>
                             <td><a href="/editstudent/{{ student.id }}" class="btn btn-primary"><i class="bi bi-pencil"></i></a></td>
                             <td>
-                                <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal">
+                                <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal{{student.id}}">
                                     <i class="bi bi-trash"></i>
                                 </button>
                             </td>
                         </tr>
 
                         <!-- Modal -->
-                        <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+                        <div class="modal fade" id="deleteModal{{student.id}}" tabindex="-1" aria-labelledby="deleteModalLabel{{student.id}}" aria-hidden="true">
                             <div class="modal-dialog">
                                 <div class="modal-content">
                                 <div class="modal-header">
-                                    <h1 class="modal-title fs-5" id="deleteModalLabel">Modal title</h1>
+                                    <h1 class="modal-title fs-5" id="deleteModalLabel{{student.id}}">Modal title</h1>
                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                 </div>
                                 <div class="modal-body">

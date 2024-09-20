@@ -19,15 +19,23 @@ class SchoolclassFormType extends AbstractType
         $builder
             ->add('name', TextType::class, [
                 'attr' => array(
-                    'class' => 'form-control my-3',
+                    'class' => 'form-control  my-3 w-50',
                 ),
                 'label' => 'Nom de la classe : '
             ])
             ->add('color', ColorType::class, [
                 'attr' => array(
-                    'class' => 'form-control my-3 w-25',
+                    'class' => 'form-control my-3 w-50',
                 ),
                 'label' => 'Couleur associée'
+            ])
+            ->add('form', EntityType::class, [
+                'class' => Form::class,
+                'choice_label' => 'name',
+                'attr' => [
+                    'class' => 'form-control my-3 w-50',
+                ],
+                'label' => 'Choisissez le niveau de la classe ',
             ])
             ->add('isArchived', CheckboxType::class, [
                 'required' => false,
@@ -35,15 +43,7 @@ class SchoolclassFormType extends AbstractType
                     'class' => 'form-check-input',
                 ),
                 'label' => 'Classe archivée ',
-                'label_attr' => ['class' => 'form-check-label'],
-            ])
-            ->add('form', EntityType::class, [
-                'class' => Form::class,
-                'choice_label' => 'name',
-                'attr' => [
-                    'class' => 'form-control',
-                ],
-                'label' => 'Niveau ',
+                'label_attr' => ['class' => 'form-check-label me-3'],
             ]);
     }
 

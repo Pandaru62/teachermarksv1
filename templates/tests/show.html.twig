@@ -9,11 +9,11 @@
     <div class="bg-secondary bg-opacity-25 m-lg-5 p-3 rounded-3">
         <h2 class="text-center mb-3">Mes évaluations :</h2>
 
-        <div id="filterSection" class="mb-3 border border-grey bg-light rounded-3 p-3">
-            <span>Afficher / Masquer les classes : </span>
-            <button id="showAllClassesBtn" class="btn btn-outline-primary">Toutes les classes</button>
+        <div id="filterSection" class="mb-3 border border-grey bg-light rounded-3">
+            <span class="m-2">Afficher / Masquer les classes : </span>
+            <button id="showAllClassesBtn" class="btn btn-outline-primary m-2">Toutes les classes</button>
             {% for className, class in testsByClass %}
-            <button id="show{{ className }}" class="btn btn-primary">{{ className }}</button>
+            <button id="show{{ className }}" class="btn btn-primary m-2">{{ className }}</button>
             {% endfor %}
         </div>
 
