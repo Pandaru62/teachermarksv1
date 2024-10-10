@@ -156,22 +156,22 @@ class StudentController extends AbstractController
                 ];
             }
             
-            if ($studentTest->getSkill1() !== null) {
+            if ($studentTest->getSkill1() !== null && $studentTest->getSkill1() !== 0) {
                 $trimesterData[$trimester]['skill1'][] = $studentTest->getSkill1();
             }
-            if ($studentTest->getSkill2() !== null) {
+            if ($studentTest->getSkill2() !== null && $studentTest->getSkill2() !== 0) {
                 $trimesterData[$trimester]['skill2'][] = $studentTest->getSkill2();
             }
-            if ($studentTest->getSkill3() !== null) {
+            if ($studentTest->getSkill3() !== null && $studentTest->getSkill3() !== 0) {
                 $trimesterData[$trimester]['skill3'][] = $studentTest->getSkill3();
             }
-            if ($studentTest->getSkill4() !== null) {
+            if ($studentTest->getSkill4() !== null && $studentTest->getSkill4() !== 0) {
                 $trimesterData[$trimester]['skill4'][] = $studentTest->getSkill4();
             }
-            if ($studentTest->getSkill5() !== null) {
+            if ($studentTest->getSkill5() !== null && $studentTest->getSkill5() !== 0) {
                 $trimesterData[$trimester]['skill5'][] = $studentTest->getSkill5();
             }
-            if ($studentTest->getMark() !== null) {
+            if ($studentTest->getMark() !== null && $studentTest->getMark() > 0) {
                 $trimesterData[$trimester]['mark'][] = $studentTest->getMark();
             }
             if ($studentTest->getTest()->getScale() !== null) {
@@ -180,6 +180,7 @@ class StudentController extends AbstractController
             if ($studentTest->getTest()->getCoefficient() !== null) {
                 $trimesterData[$trimester]['coefficient'][] = $studentTest->getTest()->getCoefficient();
             }
+            
         }
 
         // Calculate average skill for each trimester and each skill

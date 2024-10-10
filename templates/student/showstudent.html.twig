@@ -213,92 +213,92 @@
                             <tr>
                                 <th scope="row"><span class="compet1">Lecture</span></th>
                                 <td>
-                                    <span class="skill-level skill-level{{ averageStudentTest[1] is defined ? averageStudentTest[1]['skill1']|round(0,'floor') : "x"}}">
-                                        {{ averageStudentTest[1] is defined ? averageStudentTest[1]['skill1'] : "x"}}
+                                    <span class="skill-level skill-level{{ averageStudentTest[1] is defined ? averageStudentTest[1]['skill1']|round(0, 'floor') : 'x' }}">
+                                        {{ averageStudentTest[1] is defined and averageStudentTest[1]['skill1'] is not null and averageStudentTest[1]['skill1'] != 0 ? averageStudentTest[1]['skill1'] : 'x' }}
                                     </span>
                                 </td>
                                 <td>
                                     <span class="skill-level skill-level{{ averageStudentTest[2] is defined ? averageStudentTest[2]['skill1']|round(0,'floor') : "x"}}">
-                                        {{ averageStudentTest[2] is defined ? averageStudentTest[2]['skill1'] : "x"}}
+                                        {{ averageStudentTest[2] is defined and averageStudentTest[2]['skill1'] is not null and averageStudentTest[2]['skill1'] != 0 ? averageStudentTest[2]['skill1'] : "x"}}
                                     </span>
                                 </td>
                                 <td>
                                     <span class="skill-level skill-level{{ averageStudentTest[3] is defined ? averageStudentTest[3]['skill1']|round(0,'floor') : "x"}}">
-                                        {{ averageStudentTest[3] is defined ? averageStudentTest[3]['skill1'] : "x"}}
+                                        {{ averageStudentTest[3] is defined and averageStudentTest[3]['skill1'] is not null and averageStudentTest[3]['skill1'] != 0 ? averageStudentTest[3]['skill1'] : "x"}}
                                     </span>
                                 </td>
                                 <td>
                                     <span class="skill-level skill-level{{ averageStudentTest['year'] is defined ? averageStudentTest['year']['skill1']|round(0,'floor') : "x"}}">
-                                        {{ averageStudentTest['year'] is defined ? averageStudentTest['year']['skill1'] : "x"}}
+                                        {{ averageStudentTest[2] is defined and averageStudentTest['year']['skill1'] is not null and averageStudentTest['year']['skill1'] != 0 ? averageStudentTest['year']['skill1'] : "x"}}
                                     </span>
                                 </td>
                             </tr>
                             <tr>
                                 <th scope="row"><span class="compet2">Connaissances</span></th>
                                 <td>
-                                    <span class="skill-level skill-level{{ averageStudentTest[1] is defined ? averageStudentTest[1]['skill2']|round(0,'floor') : "x"}}">
-                                        {{ averageStudentTest[1] is defined ? averageStudentTest[1]['skill2'] : "x"}}
+                                    <span class="skill-level skill-level{{ averageStudentTest[1] is defined ? averageStudentTest[1]['skill2']|round(0, 'floor') : 'x' }}">
+                                        {{ averageStudentTest[1] is defined and averageStudentTest[1]['skill2'] is not null and averageStudentTest[1]['skill2'] != 0 ? averageStudentTest[1]['skill2'] : 'x' }}
                                     </span>
                                 </td>
                                 <td>
                                     <span class="skill-level skill-level{{ averageStudentTest[2] is defined ? averageStudentTest[2]['skill2']|round(0,'floor') : "x"}}">
-                                        {{ averageStudentTest[2] is defined ? averageStudentTest[2]['skill2'] : "x"}}
+                                        {{ averageStudentTest[2] is defined and averageStudentTest[2]['skill2'] is not null and averageStudentTest[2]['skill2'] != 0 ? averageStudentTest[2]['skill2'] : "x"}}
                                     </span>
                                 </td>
                                 <td>
                                     <span class="skill-level skill-level{{ averageStudentTest[3] is defined ? averageStudentTest[3]['skill2']|round(0,'floor') : "x"}}">
-                                        {{ averageStudentTest[3] is defined ? averageStudentTest[3]['skill2'] : "x"}}
+                                        {{ averageStudentTest[3] is defined and averageStudentTest[3]['skill2'] is not null and averageStudentTest[3]['skill2'] != 0 ? averageStudentTest[3]['skill2'] : "x"}}
                                     </span>
                                 </td>
                                 <td>
                                     <span class="skill-level skill-level{{ averageStudentTest['year'] is defined ? averageStudentTest['year']['skill2']|round(0,'floor') : "x"}}">
-                                        {{ averageStudentTest['year'] is defined ? averageStudentTest['year']['skill2'] : "x"}}
+                                        {{ averageStudentTest[2] is defined and averageStudentTest['year']['skill2'] is not null and averageStudentTest['year']['skill2'] != 0 ? averageStudentTest['year']['skill2'] : "x"}}
                                     </span>
                                 </td>
                             </tr>
                             <tr>
                                 <th scope="row"><span class="compet3">Argumentation</span></th>
                                 <td>
-                                    <span class="skill-level skill-level{{ averageStudentTest[1] is defined ? averageStudentTest[1]['skill3']|round(0,'floor') : "x"}}">
-                                        {{ averageStudentTest[1] is defined ? averageStudentTest[1]['skill3'] : "x"}}
+                                    <span class="skill-level skill-level{{ averageStudentTest[1] is defined ? averageStudentTest[1]['skill3']|round(0, 'floor') : 'x' }}">
+                                        {{ averageStudentTest[1] is defined and averageStudentTest[1]['skill3'] is not null and averageStudentTest[1]['skill3'] != 0 ? averageStudentTest[1]['skill3'] : 'x' }}
                                     </span>
                                 </td>
                                 <td>
                                     <span class="skill-level skill-level{{ averageStudentTest[2] is defined ? averageStudentTest[2]['skill3']|round(0,'floor') : "x"}}">
-                                        {{ averageStudentTest[2] is defined ? averageStudentTest[2]['skill3'] : "x"}}
+                                        {{ averageStudentTest[2] is defined and averageStudentTest[2]['skill3'] is not null and averageStudentTest[2]['skill3'] != 0 ? averageStudentTest[2]['skill3'] : "x"}}
                                     </span>
                                 </td>
                                 <td>
                                     <span class="skill-level skill-level{{ averageStudentTest[3] is defined ? averageStudentTest[3]['skill3']|round(0,'floor') : "x"}}">
-                                        {{ averageStudentTest[3] is defined ? averageStudentTest[3]['skill3'] : "x"}}
+                                        {{ averageStudentTest[3] is defined and averageStudentTest[3]['skill3'] is not null and averageStudentTest[3]['skill3'] != 0 ? averageStudentTest[3]['skill3'] : "x"}}
                                     </span>
                                 </td>
                                 <td>
                                     <span class="skill-level skill-level{{ averageStudentTest['year'] is defined ? averageStudentTest['year']['skill3']|round(0,'floor') : "x"}}">
-                                        {{ averageStudentTest['year'] is defined ? averageStudentTest['year']['skill3'] : "x"}}
+                                        {{ averageStudentTest[2] is defined and averageStudentTest['year']['skill3'] is not null and averageStudentTest['year']['skill3'] != 0 ? averageStudentTest['year']['skill3'] : "x"}}
                                     </span>
                                 </td>
                             </tr>
                             <tr>
                                 <th scope="row"><span class="compet4">Ecrit</span></th>
                                 <td>
-                                    <span class="skill-level skill-level{{ averageStudentTest[1] is defined ? averageStudentTest[1]['skill4']|round(0,'floor') : "x"}}">
-                                        {{ averageStudentTest[1] is defined ? averageStudentTest[1]['skill4'] : "x"}}
+                                    <span class="skill-level skill-level{{ averageStudentTest[1] is defined ? averageStudentTest[1]['skill4']|round(0, 'floor') : 'x' }}">
+                                        {{ averageStudentTest[1] is defined and averageStudentTest[1]['skill4'] is not null and averageStudentTest[1]['skill4'] != 0 ? averageStudentTest[1]['skill4'] : 'x' }}
                                     </span>
                                 </td>
                                 <td>
                                     <span class="skill-level skill-level{{ averageStudentTest[2] is defined ? averageStudentTest[2]['skill4']|round(0,'floor') : "x"}}">
-                                        {{ averageStudentTest[2] is defined ? averageStudentTest[2]['skill4'] : "x"}}
+                                        {{ averageStudentTest[2] is defined and averageStudentTest[2]['skill4'] is not null and averageStudentTest[2]['skill4'] != 0 ? averageStudentTest[2]['skill4'] : "x"}}
                                     </span>
                                 </td>
                                 <td>
                                     <span class="skill-level skill-level{{ averageStudentTest[3] is defined ? averageStudentTest[3]['skill4']|round(0,'floor') : "x"}}">
-                                        {{ averageStudentTest[3] is defined ? averageStudentTest[3]['skill4'] : "x"}}
+                                        {{ averageStudentTest[3] is defined and averageStudentTest[3]['skill4'] is not null and averageStudentTest[3]['skill4'] != 0 ? averageStudentTest[3]['skill4'] : "x"}}
                                     </span>
                                 </td>
                                 <td>
                                     <span class="skill-level skill-level{{ averageStudentTest['year'] is defined ? averageStudentTest['year']['skill4']|round(0,'floor') : "x"}}">
-                                        {{ averageStudentTest['year'] is defined ? averageStudentTest['year']['skill4'] : "x"}}
+                                        {{ averageStudentTest[2] is defined and averageStudentTest['year']['skill4'] is not null and averageStudentTest['year']['skill4'] != 0 ? averageStudentTest['year']['skill4'] : "x"}}
                                     </span>
                                 </td>
                             </tr>
@@ -306,23 +306,23 @@
                                 <tr>
                                 <th scope="row"><span class="compet5">Oral</span></th>
                                 <td>
-                                    <span class="skill-level skill-level{{ averageStudentTest[1] is defined ? averageStudentTest[1]['skill5']|round(0,'floor') : "x"}}">
-                                        {{ averageStudentTest[1] is defined ? averageStudentTest[1]['skill5'] : "x"}}
+                                    <span class="skill-level skill-level{{ averageStudentTest[1] is defined ? averageStudentTest[1]['skill5']|round(0, 'floor') : 'x' }}">
+                                        {{ averageStudentTest[1] is defined and averageStudentTest[1]['skill5'] is not null and averageStudentTest[1]['skill5'] != 0 ? averageStudentTest[1]['skill5'] : 'x' }}
                                     </span>
                                 </td>
                                 <td>
                                     <span class="skill-level skill-level{{ averageStudentTest[2] is defined ? averageStudentTest[2]['skill5']|round(0,'floor') : "x"}}">
-                                        {{ averageStudentTest[2] is defined ? averageStudentTest[2]['skill5'] : "x"}}
+                                        {{ averageStudentTest[2] is defined and averageStudentTest[2]['skill5'] is not null and averageStudentTest[2]['skill5'] != 0 ? averageStudentTest[2]['skill5'] : "x"}}
                                     </span>
                                 </td>
                                 <td>
                                     <span class="skill-level skill-level{{ averageStudentTest[3] is defined ? averageStudentTest[3]['skill5']|round(0,'floor') : "x"}}">
-                                        {{ averageStudentTest[3] is defined ? averageStudentTest[3]['skill5'] : "x"}}
+                                        {{ averageStudentTest[3] is defined and averageStudentTest[3]['skill5'] is not null and averageStudentTest[3]['skill5'] != 0 ? averageStudentTest[3]['skill5'] : "x"}}
                                     </span>
                                 </td>
                                 <td>
                                     <span class="skill-level skill-level{{ averageStudentTest['year'] is defined ? averageStudentTest['year']['skill5']|round(0,'floor') : "x"}}">
-                                        {{ averageStudentTest['year'] is defined ? averageStudentTest['year']['skill5'] : "x"}}
+                                        {{ averageStudentTest[2] is defined and averageStudentTest['year']['skill5'] is not null and averageStudentTest['year']['skill5'] != 0 ? averageStudentTest['year']['skill5'] : "x"}}
                                     </span>
                                 </td>
                             </tr>
