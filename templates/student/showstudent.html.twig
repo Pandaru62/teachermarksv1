@@ -152,7 +152,7 @@
                 <div>
                     <h2>Suivi des évaluations</h2>
                 </div>
-                <div class="fs-2 d-print-none" id="exportButtons">
+                <div class="fs-2" id="exportButtons">
                     <button onClick="#" class="btn btn-secondary d-none"><i class="bi bi-file-earmark-pdf"></i></button>
                     <button onClick="window.print()" class="btn btn-secondary"><i class="bi bi-printer"></i></button>
                 </div>
@@ -193,11 +193,9 @@
 
         </div>
 
-        <div class="pagebreak"></div>
-
-        <div class="row pb-3">
-            <h2>Récapitulatif trimestriel</h2>
-            <div class="col-lg-8">
+        <div class="row pb-3 d-print">
+            <div class="col-lg-5 d-print-none">
+                <h2>Récapitulatif trimestriel</h2>
                 <div class="table-responsive">
                     <table class="table-border-print table table-hover text-center align-middle">
                         <thead>
@@ -338,8 +336,8 @@
                     </table> 
                 </div> 
             </div>
-            <div class="offset-lg-1 col-lg-3 d-flex justify-content-center align-items-center rounded-5" id="studentChart">
-                <canvas id="myChart" width="400" height="400"></canvas>
+            <div class="col-lg-7 d-flex justify-content-center align-items-center rounded-5" id="studentChart" style="height: 500px">
+                <canvas id="myChart"></canvas>
                 <script type="application/json" id="chartData">{{ chartData|raw }}</script>
                 <script type="application/json" id="chartOptions">{{ chartOptions|raw }}</script>
             </div>
