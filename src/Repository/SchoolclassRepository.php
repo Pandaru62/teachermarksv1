@@ -16,6 +16,23 @@ class SchoolclassRepository extends ServiceEntityRepository
         parent::__construct($registry, Schoolclass::class);
     }
 
+    public function isDarkBackground($hexColor) {
+        // Remove the '#' if present
+        $hexColor = str_replace('#', '', $hexColor);
+    
+        // Convert hex to RGB
+        $r = hexdec(substr($hexColor, 0, 2));
+        $g = hexdec(substr($hexColor, 2, 2));
+        $b = hexdec(substr($hexColor, 4, 2));
+    
+        // Calculate luminance
+        $luminance = ($r * 0.299 + $g * 0.587 + $b * 0.114);
+    
+        // Return true if the background is dark (luminance < 128)
+        return $luminance < 128;
+    }
+
+
 //    /**
 //     * @return Schoolclass[] Returns an array of Schoolclass objects
 //     */

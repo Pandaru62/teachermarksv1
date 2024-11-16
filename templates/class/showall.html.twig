@@ -14,8 +14,9 @@
                         {{class.name}}
                     </a>
                     <a href="/addstudent" class="list-group-item list-group-item-action"><i class="bi bi-plus-circle-fill"></i> Ajouter un élève</a>
-                    <a href="/addmanystudents/{{class.id}}" class="list-group-item list-group-item-action"><i class="bi bi-plus-circle-fill"></i> Ajout multiple d'élèves</a>
+                    <a href="/addmanystudents/{{class.id}}" class="list-group-item list-group-item-action"><i class="bi bi-people-fill"></i> Ajout multiple d'élèves</a>
                     <a href="/editclass/{{class.id}}" class="list-group-item list-group-item-action"><i class="bi bi-pencil"></i> Editer la classe</a>
+                    <a href="/print/{{class.id}}" class="list-group-item list-group-item-action"><i class="bi bi-file-earmark-pdf"></i> Télécharger un récap</a>
                     <a href="/archiveclass/{{class.id}}" class="list-group-item list-group-item-action"><i class="bi bi-archive"></i> Archiver la classe</a>
                 </div>
             {% endfor %}

@@ -41,6 +41,7 @@ class ShowClassController extends AbstractController
             // Return true if the background is dark (luminance < 128)
             return $luminance < 128;
         }
+    
 
         $isDarkBackground = isDarkBackground($selectedClass->getColor());
 
@@ -50,4 +51,6 @@ class ShowClassController extends AbstractController
             'isDarkBackground' => $isDarkBackground,
         ]);
     }
+
+
 }
