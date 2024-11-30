@@ -114,6 +114,48 @@
     width: calc(100% / 7);
 }
 
+.d-print-grid {
+    width: 100%; /* Or set a max-width like '700px' to fit the A4 page */
+    box-sizing: border-box;
+    padding: 0 10px; /* Adding padding can help prevent cutoff */
+}
+
+#studentChart {
+    height: 300px;
+}
+
+#studentChart:hover {
+    height: 500px;
+}
+
+
+/* UPDATE */
+/* Sticky header */
+th.sticky-header {
+position: sticky;
+top: 0;
+background-color: #f8f9fa;
+z-index: 2; /* Ensures the header stays on top */
+}
+
+/* Sticky first column */
+td.sticky-first-column, th.sticky-first-column {
+position: sticky;
+left: 0;
+background-color: #f8f9fa;
+z-index: 1; /* Lower than the header */
+}
+
+/* Optional: Add some styling for better visibility */
+table th, table td {
+padding: 8px;
+text-align: center;
+}
+
+.table-responsive {
+overflow-x: auto;
+}
+
 /* editing skills page */
 
 .input-skill {

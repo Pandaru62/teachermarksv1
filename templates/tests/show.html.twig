@@ -3,18 +3,25 @@
 {% block title %}Teachermarks - Mes évaluations{% endblock %}
 
 {% block body %}
-
-   
 <div class="container-fluid d-flex flex-column justify-content-center">
     <div class="bg-secondary bg-opacity-25 m-lg-5 p-3 rounded-3">
         <h2 class="text-center mb-3">Mes évaluations :</h2>
 
         <div id="filterSection" class="mb-3 border border-grey bg-light rounded-3">
-            <span class="m-2">Afficher / Masquer les classes : </span>
-            <button id="showAllClassesBtn" class="btn btn-outline-primary m-2">Toutes les classes</button>
-            {% for className, class in testsByClass %}
-            <button id="show{{ className }}" class="btn btn-primary m-2">{{ className }}</button>
-            {% endfor %}
+            <div>
+                <span class="m-2">Filtrer par classe : </span>
+                <button id="showAllClassesBtn" class="btn btn-outline-primary m-2">Toutes les classes</button>
+                {% for className, class in testsByClass %}
+                <button id="show{{ className }}" class="btn btn-primary m-2">{{ className }}</button>
+                {% endfor %}
+            </div>
+            <div>
+                <span class="m-2">Filtre par trimestre : </span>
+                <button id="showAllTrimestersBtn" class="btn btn-outline-primary m-2">Tous les trimestres</button>
+                <button id="showTr1" class="btn btn-primary m-2">TR 1</button>
+                <button id="showTr2" class="btn btn-primary m-2">TR 2</button>
+                <button id="showTr3" class="btn btn-primary m-2">TR 3</button>
+            </div>
         </div>
 
         {% for className, class in testsByClass %}
@@ -23,10 +30,10 @@
 
             <div class="d-flex flex-wrap justify-content-around align-items-center m-3">
                 {% for test in class.tests %}
-                <ul class="list-group text-center pb-3 m-lg-3">
+                <ul class="list-group text-center pb-3 m-lg-3 trimester-{{ test.trimester }}">
                     <li class="list-group-item active text-{{ class.colortext }} d-flex justify-content-between align-items-center"  style="background-color: {{class.color}}; border-color: black ">
                         <div>
-                            {{ test.date|date('d/m/Y') }} <br>
+                            {{ test.date|date('d/m/Y') }} (TR{{test.trimester}}) <br>
                             <span class="fw-bold">{{ test.description }}</span>
                         </div>
                         <a href="/edittest/{{ test.id }}" class="btn btn-light">
@@ -51,26 +58,36 @@
 </div>
 
 <script>
-    const showAllBtn = document.getElementById('showAllClassesBtn');
-    const classButtons = document.querySelectorAll('#filterSection button:not(#showAllClassesBtn)');
+    const showAllClassesBtn = document.getElementById('showAllClassesBtn');
+    const classButtons = document.querySelectorAll('#filterSection button:not(#showAllClassesBtn):not([id^="showTr"])');
     const classSections = document.querySelectorAll('.classTestsDiv');
+    const trimesterButtons = document.querySelectorAll('#filterSection button[id^="showTr"]');
+    const allTestItems = document.querySelectorAll('.list-group');
 
-    // Function to reset all buttons to their default state
-    function resetButtons() {
-        showAllBtn.classList.remove('btn-outline-primary');
-        showAllBtn.classList.add('btn-primary');
+    // Function to reset class buttons to their default state
+    function resetClassButtons() {
+        showAllClassesBtn.classList.remove('btn-outline-primary');
+        showAllClassesBtn.classList.add('btn-primary');
         classButtons.forEach(button => {
             button.classList.remove('btn-outline-primary');
             button.classList.add('btn-primary');
         });
     }
 
+    // Function to reset trimester buttons to their default state
+    function resetTrimesterButtons() {
+        trimesterButtons.forEach(button => {
+            button.classList.remove('btn-outline-primary');
+            button.classList.add('btn-primary');
+        });
+    }
+
     // Show all sections when "Toutes les classes" is clicked
-    showAllBtn.addEventListener('click', () => {
+    showAllClassesBtn.addEventListener('click', () => {
         classSections.forEach(section => section.classList.remove('d-none'));
-        resetButtons(); // Reset all buttons to default
-        showAllBtn.classList.remove('btn-primary'); // Highlight the active button
-        showAllBtn.classList.add('btn-outline-primary');
+        resetClassButtons(); // Reset all class buttons
+        showAllClassesBtn.classList.remove('btn-primary');
+        showAllClassesBtn.classList.add('btn-outline-primary');
     });
 
     // Add event listeners to individual class buttons
@@ -84,12 +101,36 @@
                     section.classList.add('d-none');
                 }
             });
-            resetButtons(); // Reset all buttons to default
-            button.classList.remove('btn-primary'); // Highlight the active button
+            resetClassButtons();
+            button.classList.remove('btn-primary');
+            button.classList.add('btn-outline-primary');
+        });
+    });
+
+    // Show all trimester items when "Tous les trimestres" is clicked
+    document.getElementById('showAllTrimestersBtn').addEventListener('click', () => {
+        allTestItems.forEach(item => item.classList.remove('d-none'));
+        resetTrimesterButtons();
+        document.getElementById('showAllTrimestersBtn').classList.remove('btn-primary');
+        document.getElementById('showAllTrimestersBtn').classList.add('btn-outline-primary');
+    });
+
+    // Add event listeners to trimester filter buttons
+    trimesterButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const trimester = button.id.replace('showTr', '');
+            allTestItems.forEach(item => {
+                const classMatch = item.closest('.classTestsDiv').classList.contains(`${item.closest('.classTestsDiv').id}-section`);
+                if (item.classList.contains(`trimester-${trimester}`) && classMatch) {
+                    item.classList.remove('d-none');
+                } else {
+                    item.classList.add('d-none');
+                }
+            });
+            resetTrimesterButtons();
+            button.classList.remove('btn-primary');
             button.classList.add('btn-outline-primary');
         });
     });
 </script>
-
-
 {% endblock %}

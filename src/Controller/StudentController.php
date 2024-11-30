@@ -140,7 +140,13 @@ class StudentController extends AbstractController
 
 
         $repository = $this->em->getRepository(StudentTest::class);
-        $studentTests = $repository->findBy(['student' => $studentid]);
+        $studentTests = $repository->createQueryBuilder('st')
+        ->innerJoin('st.test', 't') // Assuming 'test' is the related entity
+        ->where('st.student = :studentid')
+        ->setParameter('studentid', $studentid)
+        ->orderBy('t.date', 'DESC') // Order by test.date descending
+        ->getQuery()
+        ->getResult();
 
         $averageStudentTest = [];
         $averageStudentMark = [];

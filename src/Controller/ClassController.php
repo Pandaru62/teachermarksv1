@@ -20,7 +20,7 @@ class ClassController extends AbstractController
 
     }
 
-
+    
     #[Route('/voirclasses', name: 'app_class')]
     public function index(): Response
     {

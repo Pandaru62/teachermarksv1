@@ -24,29 +24,76 @@
 
         <div class="container-fluid d-print-none">
 
-            <header class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom">
+            <header class="p-3 mb-3 border-bottom">
+                <div class="container">
+                    <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+                        <a href="/" class="d-inline-flex link-body-emphasis text-decoration-none">
+                            <span class="bg-success text-light rounded-3 p-1 fw-bolder">TEACHERMARKS</span>
+                        </a>
 
-                <div class="col-md-2 mb-2 mb-md-0">
-                    <a href="/" class="d-inline-flex link-body-emphasis text-decoration-none">
-                    <span class="bg-success text-light rounded-3 p-1 fw-bolder">TEACHERMARKS</span>
-                    </a>
-                </div>
+                        <!-- only appears if user is logged -->
+                        {% if (app.user) %}
+                        <ul class="nav col-12 col-lg-auto ms-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+                            <li class="nav-item dropdown">
+                                <a class="nav-link text-success dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Mes classes
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" href="/voirclasses">Toutes mes classes</a></li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    {% set headerData = getHeaderData() %}
+                                    {% if headerData.classes %}
+                                        {% for class in headerData.classes %}
+                                            <li><a class="dropdown-item" href="#">{{class.name}}</a></li>
+                                        {% endfor %}
+                                    {% else %}
+                                        <li><a class="dropdown-item" href="#">XXX</a></li>
+                                    {% endif %}
+                                    
+                                </ul>
+                            </li>
+                            <li><a href="/seetests" class="nav-link px-2 text-success ">Mes évaluations</a></li>
+                            <li><a href="/addtest" class="nav-link px-2 text-success ">Ajouter une évaluation</a></li>
+                        </ul>
 
-                <!-- only appears if user is logged -->
-                {% if (app.user) %}
-                <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0 ">
-                    <li><a href="/voirclasses" class="nav-link px-2 text-success ">Voir mes classes</a></li>
-                    <li><a href="/seetests" class="nav-link px-2 text-success ">Voir mes évaluations</a></li>
-                    <li><a href="/addtest" class="nav-link px-2 text-success ">Ajouter une évaluation</a></li>
-                    {# <li><a href="/editSkillScale" class="nav-link px-2 text-success ">Config.</a></li> #}
-                </ul>
-                {% endif %}
+                        <script>
+                            const headerData = {{ headerData|json_encode|raw }};
+                        </script>
+                        
 
-                <!-- nav adapts to user login -->
-                <div class="col-md-2 text-center text-md-end">
-                    <a href="/{{ app.user ? 'logout' : 'login'}}" class="btn btn-outline-success me-2">{{ app.user ? 'Déconnexion' : 'Connexion' }}</a>
+                        <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" role="search">
+                            {# <input type="search" class="form-control" placeholder="Rechercher..." aria-label="Search"> #}
+
+                            <input 
+                                id="student-search" 
+                                type="search" 
+                                class="form-control" 
+                                placeholder="Rechercher un étudiant..." 
+                                aria-label="Search" 
+                                autocomplete="off"/>
+
+                            <div id="search-suggestions" class="list-group position-absolute d-none" style="z-index: 1000; width: 100%;">
+                                <!-- Suggestions will be inserted here dynamically -->
+                            </div>
+                        </form>
+
+                        {% endif %}
+                        <div class="dropdown text-end {{ app.user ? '' : 'ms-auto'}}>
+                            <a href="#" class="d-block link-body-emphasis text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                <img src="./images/user_icon.png" alt="mdo" width="32" height="32" class="rounded-circle">
+                            </a>
+                            <ul class="dropdown-menu text-small">
+                                {# <li><a class="dropdown-item" href="#">Paramètres</a></li> #}
+                                {# <li><a class="dropdown-item" href="#">Profile</a></li> #}
+                                {# <li><hr class="dropdown-divider"></li> #}
+                                <li><a href="/{{ app.user ? 'logout' : 'login'}}" class="dropdown-item">{{ app.user ? 'Déconnexion' : 'Connexion' }}</a></li>
+                            </ul>
+                        </div>
+                        
+                    </div>
                 </div>
             </header>
+
         </div>
 
         {% endblock %}
@@ -61,13 +108,15 @@
                 <div class="row">
                     <div class="col-lg-7 ">
                         <div class="bg-secondary bg-opacity-25 mb-3 m-lg-5 p-3 rounded-3">
-                            <h2 class="text-center">Teachermarks (V1.2.), c'est ...</h2>
+                            <h2 class="text-center">Teachermarks (V1.3.), c'est ...</h2>
+                            <p class="text-center"><i class="text-success fs-6">(Mise à jour du 30/11/2024)</i></p>
                             <ul class="update-list">
-                                <li><i class="bi bi-check2-square"></i> Un accès sécurisé pour les professeurs.</li>
                                 <li><i class="bi bi-check2-square"></i> Des fonctionnalités d'ajout de classes et d'élèves.</li>
                                 <li><i class="bi bi-check2-square"></i> La gestion des évaluations.</li>
                                 <li><i class="bi bi-check2-square"></i> L'accès à des récapitulatifs élèves avec diagrammes de progression.</li>
                                 <li><i class="bi bi-check2-square"></i> Le transfert des données en format PDF.</li>
+                                <li class="text-success"><i class="bi bi-check2-square"></i> Une barre de recherche pour retrouver plus facilement ses élèves</li>
+                                <li class="text-success"><i class="bi bi-check2-square"></i> Des tableaux récapitulatifs plus adaptés aux petits écrans</li>
                             </ul>
                         </div>
                     </div>
@@ -75,11 +124,13 @@
                         <div class="bg-secondary bg-opacity-25 m-lg-5 p-3 rounded-3">
                     
                             <h2 class="text-center">Dans la prochaine mise à jour :</h2>
-                            <p class="text-center"><i class="text-success fs-6">(fin septembre 2024)</i></p>
+                            <p class="text-center"><i class="text-success fs-6">(début 2025)</i></p>
                             
                             <ul class="update-list">
-                                <li><i class="bi bi-chat-square-dots"></i> Export des données en PDF</li>
-                                <li><i class="bi bi-check2-square"></i> Fonctionnalités d'impression</li>
+                                <li><i class="bi bi-chat-square-dots"></i> Graphismes améliorés</li>
+                                <li><i class="bi bi-chat-square-dots"></i> Meilleure gestion de l'edition des évaluations</li>
+                                <li><i class="bi bi-chat-square-dots"></i> Filtrages et tris plus dynamiques</li>
+                                <li><i class="bi bi-chat-square-dots"></i> Export PDF plus adaptés</li>
                             </ul>
                         </div>
                     </div>
@@ -90,5 +141,77 @@
 
         {% endblock %}
         </main>
+
+            <script>
+                document.addEventListener('DOMContentLoaded', function () {
+                const searchInput = document.getElementById('student-search');
+                const suggestionsBox = document.getElementById('search-suggestions');
+                
+                let typingTimeout;
+
+                // Listen for input events
+                searchInput.addEventListener('input', function () {
+                    const query = searchInput.value.trim().toLowerCase();
+
+                    clearTimeout(typingTimeout); // Clear previous timeout (debouncing)
+
+                    typingTimeout = setTimeout(function () {
+                        // Clear previous suggestions
+                        while (suggestionsBox.firstChild) {
+                            suggestionsBox.removeChild(suggestionsBox.firstChild);
+                        }
+
+                        if (query.length === 0) {
+                            suggestionsBox.classList.add('d-none');
+                            return;
+                        }
+
+                        // Split the query into separate words for firstname and lastname search
+                        const queryParts = query.split(' ');
+
+                        // Filter students based on the query
+                        const filteredStudents = studentList.filter(student => {
+                            const fullName = `${student.firstname.toLowerCase()} ${student.lastname.toLowerCase()}`;
+                            const queryMatches = queryParts.every(part => 
+                                fullName.includes(part.toLowerCase()) ||
+                                student.firstname.toLowerCase().includes(part) ||
+                                student.lastname.toLowerCase().includes(part)
+                            );
+                            return queryMatches;
+                        });
+
+                        // Populate suggestions
+                        if (filteredStudents.length > 0) {
+                            filteredStudents.forEach(student => {
+                                const suggestion = document.createElement('a');
+                                suggestion.href = `/showstudent${student.id}`;
+                                suggestion.classList.add('list-group-item', 'list-group-item-action');
+                                suggestion.textContent = `${student.firstname} ${student.lastname} (${student.class})`; // Added class
+
+                                // Check if the suggestion already exists
+                                const existingSuggestion = Array.from(suggestionsBox.children).find(child =>
+                                    child.textContent === suggestion.textContent
+                                );
+
+                                if (!existingSuggestion) {
+                                    suggestionsBox.appendChild(suggestion);
+                                }
+                            });
+                            suggestionsBox.classList.remove('d-none');
+                        } else {
+                            suggestionsBox.classList.add('d-none');
+                        }
+                    }, 300); // Debouncing delay
+                });
+
+                // Hide suggestions when clicking outside
+                document.addEventListener('click', function (event) {
+                    if (!suggestionsBox.contains(event.target) && event.target !== searchInput) {
+                        suggestionsBox.classList.add('d-none');
+                    }
+                });
+            });
+
+        </script>
     </body>
 </html>

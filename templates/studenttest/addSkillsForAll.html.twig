@@ -91,147 +91,133 @@
     </div>
 
     <div class="pb-3">
-        <h2>Edition des compétences</h2>
+    <h2>Edition des compétences</h2>
 
-            <div class="container my-4">
-                <form id="skillsForm">
-                    <div class="row fw-bolder justify-content-center bg-light p-3 rounded-4">
-                        <div class="col-12">
-                            <h3 class="text-center">Selectionnez les compétences évaluées pour ce test.</h3>
-                        </div>
+    <div class="container my-4">
+        <form id="skillsForm">
+            <div class="row fw-bolder justify-content-center bg-light p-3 rounded-4">
+                <div class="col-12">
+                    <h3 class="text-center">Selectionnez les compétences évaluées pour ce test.</h3>
+                </div>
 
-                        <div class="col-lg-2">
-                            <div class="form-check d-flex align-items-center">
-                                <input class="form-check-input" type="checkbox" id="skill-1" name="skill-1" checked>
-                                <label class="form-check-label ps-2" for="skill-1">
-                                    <span class="compet1">Lecture</span>
-                                </label>
-                            </div>
-                        </div>
-
-                        <div class="col-lg-3">
-                            <div class="form-check d-flex align-items-center">
-                                <input class="form-check-input" type="checkbox" id="skill-2" name="skill-2" checked>
-                                <label class="form-check-label ps-2" for="skill-2">
-                                    <span class="compet2">Connaissances</span>
-                                </label>
-                            </div>
-                        </div>
-
-                        <div class="col-lg-3">
-                            <div class="form-check d-flex align-items-center">
-                                <input class="form-check-input" type="checkbox" id="skill-3" name="skill-3" checked>
-                                <label class="form-check-label ps-2" for="skill-3">
-                                    <span class="compet3">Argumentation</span>
-                                </label>
-                            </div>
-                        </div>
-
-                        <div class="col-lg-2">
-                            <div class="form-check d-flex align-items-center">
-                                <input class="form-check-input" type="checkbox" id="skill-4" name="skill-4" checked>
-                                <label class="form-check-label ps-2" for="skill-4">
-                                    <span class="compet4">Écriture</span>
-                                </label>
-                            </div>
-                        </div>
-
-                        <div class="col-lg-2">
-                            <div class="form-check d-flex align-items-center">
-                                <input class="form-check-input" type="checkbox" id="skill-5" name="skill-5" checked>
-                                <label class="form-check-label ps-2" for="skill-5">
-                                    <span class="compet5">Oral</span>
-                                </label>
-                            </div>
-                        </div>
+                <div class="col-lg-2">
+                    <div class="form-check d-flex align-items-center">
+                        <input class="form-check-input" type="checkbox" id="skill-1" name="skill-1"
+                            {% if skill1Avg > 0 %} checked {% endif %}
+                        >
+                        <label class="form-check-label ps-2" for="skill-1">
+                            <span class="compet1">Lecture</span>
+                        </label>
                     </div>
-                </form>
+                </div>
+
+                <div class="col-lg-3">
+                    <div class="form-check d-flex align-items-center">
+                        <input class="form-check-input" type="checkbox" id="skill-2" name="skill-2"
+                            {% if skill2Avg > 0 %} checked {% endif %}
+                        >
+                        <label class="form-check-label ps-2" for="skill-2">
+                            <span class="compet2">Connaissances</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="col-lg-3">
+                    <div class="form-check d-flex align-items-center">
+                        <input class="form-check-input" type="checkbox" id="skill-3" name="skill-3"
+                            {% if skill3Avg > 0 %} checked {% endif %}
+                        >
+                        <label class="form-check-label ps-2" for="skill-3">
+                            <span class="compet3">Argumentation</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="col-lg-2">
+                    <div class="form-check d-flex align-items-center">
+                        <input class="form-check-input" type="checkbox" id="skill-4" name="skill-4"
+                            {% if skill4Avg > 0 %} checked {% endif %}
+                        >
+                        <label class="form-check-label ps-2" for="skill-4">
+                            <span class="compet4">Écriture</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="col-lg-2">
+                    <div class="form-check d-flex align-items-center">
+                        <input class="form-check-input" type="checkbox" id="skill-5" name="skill-5"
+                            {% if skill5Avg > 0 %} checked {% endif %}
+                        >
+                        <label class="form-check-label ps-2" for="skill-5">
+                            <span class="compet5">Oral</span>
+                        </label>
+                    </div>
+                </div>
             </div>
-            
-
-
-
-            <form method="post" action="{{ path('app_update_student_tests', { 'testid': testInfo.id }) }}">
-            <div class="table-responsive">
-
-                <table class="table table-striped table-hover text-center align-middle">
-                    <thead class="align-middle">
-                        <tr>
-                            <th scope="col">Elève</th>
-                            <th scope="col" class="td-skill1"><span class="compet1">Lect</span></th>
-                            <th scope="col" class="td-skill2"><span class="compet2">Connaiss</span></th>
-                            <th scope="col" class="td-skill3"><span class="compet3">Argu</span></th>
-                            <th scope="col" class="td-skill4"><span class="compet4">Ecrit</span></th>
-                            <th scope="col" class="td-skill5"><span class="compet5">Oral</span></th>
-                            <th scope="col" colspan="2">Note</th>
-                        </tr>                      
-                    </thead>
-                    <tbody>
-
-                            {% for studentTest in studentTests %}
-                            <tr class="table-secondary">
-                                <th scope="row">
-                                    <a href="/showstudent{{ studentTest.student.id }}">{{ studentTest.student.lastname }} {{ studentTest.student.firstname }}</a>
-                                </th>
-                                <td class="text-center td-skill1">
-                                    <label for="skill1-{{ studentTest.id }}" class="form-label d-none">Skill 1 (ID: {{ studentTest.id }})</label>
-                                    <input id="skill1-{{ studentTest.id }}" name="studentTests[{{ studentTest.id }}][skill1]" class="form-control input-skill" type="number" min="0" max="4" value="{{ studentTest.skill1 }}">
-                                </td>
-                                <td class="text-center td-skill2">
-                                    <label for="skill2-{{ studentTest.id }}" class="form-label d-none">Skill 1 (ID: {{ studentTest.id }})</label>
-                                    <input id="skill2-{{ studentTest.id }}" name="studentTests[{{ studentTest.id }}][skill2]" class="form-control input-skill" type="number" min="0" max="4" value="{{ studentTest.skill2 }}">
-                                </td>
-                                <td class="text-center td-skill3">
-                                    <label for="skill3-{{ studentTest.id }}" class="form-label d-none">Skill 1 (ID: {{ studentTest.id }})</label>
-                                    <input id="skill3-{{ studentTest.id }}" name="studentTests[{{ studentTest.id }}][skill3]" class="form-control input-skill" type="number" min="0" max="4" value="{{ studentTest.skill3 }}">
-                                </td>
-                                <td class="text-center td-skill4">
-                                    <label for="skill4-{{ studentTest.id }}" class="form-label d-none">Skill 1 (ID: {{ studentTest.id }})</label>
-                                    <input id="skill4-{{ studentTest.id }}" name="studentTests[{{ studentTest.id }}][skill4]" class="form-control input-skill" type="number" min="0" max="4" value="{{ studentTest.skill4 }}">
-                                </td>
-                                <td class="text-center td-skill5">
-                                    <label for="skill5-{{ studentTest.id }}" class="form-label d-none">Skill 1 (ID: {{ studentTest.id }})</label>
-                                    <input id="skill5-{{ studentTest.id }}" name="studentTests[{{ studentTest.id }}][skill5]" class="form-control input-skill" type="number" min="0" max="4" value="{{ studentTest.skill5 }}">
-                                </td>
-                                <td class="text-right td-mark">
-                                    <label for="mark-{{ studentTest.id }}" class="form-label d-none">Skill 1 (ID: {{ studentTest.id }})</label>
-                                    <input id="mark-{{ studentTest.id }}" name="studentTests[{{ studentTest.id }}][mark]" class="form-control input-skill" type="number" min="0" max="20" step="0.25" value="{{ studentTest.mark }}">
-                                </td>
-                                <td class="text-start">
-                                    /{{ testInfo.scale }}
-                                </td>
-                            </tr>
-                        {% endfor %}
-
-                    </tbody>
-                </table> 
-            </div>
-            <button type="submit" class="btn btn-primary"><i class="bi bi-floppy"></i> Enregistrer les modifications</button>
         </form>
     </div>
 
+    <form method="post" action="{{ path('app_update_student_tests', { 'testid': testInfo.id }) }}">
+        <div class="table-responsive">
+            <table class="table table-striped table-hover text-center align-middle">
+                <thead class="align-middle">
+                    <tr>
+                        <th scope="col">Elève</th>
+                        <th scope="col" class="td-skill1 {% if skill1Avg <= 0 %} d-none {% endif %}"><span class="compet1">Lect</span></th>
+                        <th scope="col" class="td-skill2 {% if skill2Avg <= 0 %} d-none {% endif %}"><span class="compet2">Connaiss</span></th>
+                        <th scope="col" class="td-skill3 {% if skill3Avg <= 0 %} d-none {% endif %}"><span class="compet3">Argu</span></th>
+                        <th scope="col" class="td-skill4 {% if skill4Avg <= 0 %} d-none {% endif %}"><span class="compet4">Ecrit</span></th>
+                        <th scope="col" class="td-skill5 {% if skill5Avg <= 0 %} d-none {% endif %}"><span class="compet5">Oral</span></th>
+                        <th scope="col" colspan="2">Note</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for studentTest in studentTests %}
+                    <tr class="table-secondary">
+                        <th scope="row">
+                            <a href="/showstudent{{ studentTest.student.id }}">{{ studentTest.student.lastname }} {{ studentTest.student.firstname }}</a>
+                        </th>
+                        <td class="text-center td-skill1 {% if skill1Avg <= 0 %} d-none {% endif %}">
+                            <label for="skill1-{{ studentTest.id }}" class="form-label d-none">Skill 1 (ID: {{ studentTest.id }})</label>
+                            <input id="skill1-{{ studentTest.id }}" name="studentTests[{{ studentTest.id }}][skill1]" class="form-control input-skill" type="number" min="0" max="4" value="{{ studentTest.skill1 }}" onclick="selectText(this)">
+                        </td>
+                        <td class="text-center td-skill2 {% if skill2Avg <= 0 %} d-none {% endif %}">
+                            <label for="skill2-{{ studentTest.id }}" class="form-label d-none">Skill 2 (ID: {{ studentTest.id }})</label>
+                            <input id="skill2-{{ studentTest.id }}" name="studentTests[{{ studentTest.id }}][skill2]" class="form-control input-skill" type="number" min="0" max="4" value="{{ studentTest.skill2 }}" onclick="selectText(this)">
+                        </td>
+                        <td class="text-center td-skill3 {% if skill3Avg <= 0 %} d-none {% endif %}">
+                            <label for="skill3-{{ studentTest.id }}" class="form-label d-none">Skill 3 (ID: {{ studentTest.id }})</label>
+                            <input id="skill3-{{ studentTest.id }}" name="studentTests[{{ studentTest.id }}][skill3]" class="form-control input-skill" type="number" min="0" max="4" value="{{ studentTest.skill3 }}" onclick="selectText(this)">
+                        </td>
+                        <td class="text-center td-skill4 {% if skill4Avg <= 0 %} d-none {% endif %}">
+                            <label for="skill4-{{ studentTest.id }}" class="form-label d-none">Skill 4 (ID: {{ studentTest.id }})</label>
+                            <input id="skill4-{{ studentTest.id }}" name="studentTests[{{ studentTest.id }}][skill4]" class="form-control input-skill" type="number" min="0" max="4" value="{{ studentTest.skill4 }}" onclick="selectText(this)">
+                        </td>
+                        <td class="text-center td-skill5 {% if skill5Avg <= 0 %} d-none {% endif %}">
+                            <label for="skill5-{{ studentTest.id }}" class="form-label d-none">Skill 5 (ID: {{ studentTest.id }})</label>
+                            <input id="skill5-{{ studentTest.id }}" name="studentTests[{{ studentTest.id }}][skill5]" class="form-control input-skill" type="number" min="0" max="4" value="{{ studentTest.skill5 }}" onclick="selectText(this)">
+                        </td>
+                        <td class="text-right td-mark">
+                            <label for="mark-{{ studentTest.id }}" class="form-label d-none">Mark (ID: {{ studentTest.id }})</label>
+                            <input id="mark-{{ studentTest.id }}" name="studentTests[{{ studentTest.id }}][mark]" class="form-control input-skill" type="number" min="0" max="20" step="0.25" value="{{ studentTest.mark }}" onclick="selectText(this)">
+                        </td>
+                        <td class="text-start">
+                            /{{ testInfo.scale }}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <button type="submit" class="btn btn-primary"><i class="bi bi-floppy"></i> Enregistrer les modifications</button>
+    </form>
 </div>
 
-{# <script src="{{asset("eval-page.js")}}"></script> #}
 <script>
-    // document.addEventListener('DOMContentLoaded', function () {
-    // // Add event listeners to each checkbox
-    //     document.querySelectorAll('#skillsForm input[type="checkbox"]').forEach(function (checkbox) {
-    //         checkbox.addEventListener('change', function () {
-    //             // Replace the hyphen in the checkbox ID to match the column class format
-    //             const skillClass = '.td-' + this.id.replace('-', '');
-                
-    //             document.querySelectorAll(skillClass).forEach(function (td) {
-    //                 if (checkbox.checked) {
-    //                     td.classList.remove('d-none');
-    //                 } else {
-    //                     td.classList.add('d-none');
-    //                 }
-    //             });
-    //         });
-    //     });
-    // });
+    function selectText(element) {
+        element.select(); // Selects all text inside the input field
+        element.setSelectionRange(0, element.value.length); // Ensure text selection works in mobile browsers too
+    }
 </script>
-
 {% endblock %}
-

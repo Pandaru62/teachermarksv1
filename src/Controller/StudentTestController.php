@@ -72,60 +72,6 @@ class StudentTestController extends AbstractController
         
         
     }
-    
-    /* OLD METHOD allows to edit skills for a test one student at a time */
-    // #[Route('/addskills/test={testid}/student={studentid}', methods: ['GET', 'POST'], name: 'old_add_skills')]
-    // public function addSkills(Request $request, $testid, $studentid): Response
-    // {
-    //     // Fetch the Students entity
-    //     $student = $this->studentsRepository->find($studentid);
-    //     // Fetch the Test entity
-    //     $test = $this->testRepository->find($testid);
-
-    //     // Check if student and test are valid
-    //     if (!$student || !$test) {
-    //         throw $this->createNotFoundException('Student or Test not found');
-    //     }
-
-    //     // Check for existing StudentTest entry
-    //     $studentTest = $this->studentTestRepository->findOneBy([
-    //         'student' => $student,
-    //         'test' => $test,
-    //     ]);
-
-    //     // If no existing entry is found, create a new one
-    //     if (!$studentTest) {
-    //         $studentTest = new StudentTest();
-    //         $studentTest->setStudent($student);
-    //         $studentTest->setTest($test);
-    //     }
-
-    //     // Create the form and handle the request
-    //     $form = $this->createForm(StudentTestFormType::class, $studentTest);
-
-    //     $form->handleRequest($request);
-
-    //     if ($form->isSubmitted() && $form->isValid()) {
-    //         $studentTest = $form->getData();
-
-    //         $this->em->persist($studentTest);
-    //         $this->em->flush();
-
-    //         return $this->redirectToRoute('see_skills', ['testid' => $testid]);
-    //     }
-
-    //     // Fetch test info for rendering (if needed)
-    //     $testInfo = $this->testRepository->findOneBy(['id' => $testid]);
-
-    //     // Render the form with existing data if any
-    //     return $this->render('studenttest/add.html.twig', [
-    //         'form' => $form->createView(),
-    //         'testInfo' => $testInfo,
-    //         'student' => $student,
-    //     ]);
-    // }
-
-    /* shows the form to edit the skills */
 
     #[Route('/addtestskills/test={testid}', methods: ['GET', 'POST'], name: 'new_add_skills')]
     public function addTestSkills($testid): Response
@@ -140,11 +86,8 @@ class StudentTestController extends AbstractController
         );
 
         // Check for existing StudentTest entries
-        // $studentTests = $this->studentTestRepository->findBy([
-        //     'test' => $testid]);
 
         $studentTests = $this->studentTestRepository->findByTestOrderedByStudentLastname($testid);
-
 
          // Check if any StudentTest entries exist
          if (!$studentTests) {
@@ -163,8 +106,35 @@ class StudentTestController extends AbstractController
                 // Refetch the student tests after they are created
                 $studentTests = $this->studentTestRepository->findBy([
                 'test' => $testid]);
+
+                $skill1Avg = $skill2Avg = $skill3Avg = $skill4Avg = $skill5Avg = 0;
                 
         } else {
+
+            // handling average
+            $skill1 = $skill2 = $skill3 = $skill4 = $skill5 = 0;
+
+            foreach ($studentTests as $test) {
+                $skill1 += $test->getSkill1();
+                $skill2 += $test->getSkill2();
+                $skill3 += $test->getSkill3();
+                $skill4 += $test->getSkill4();
+                $skill5 += $test->getSkill5();
+            }
+
+            // Check if there are any tests to avoid division by zero
+            $studentCount = count($studentTests);
+            if ($studentCount > 0) {
+                $skill1Avg = $skill1 / $studentCount;
+                $skill2Avg = $skill2 / $studentCount;
+                $skill3Avg = $skill3 / $studentCount;
+                $skill4Avg = $skill4 / $studentCount;
+                $skill5Avg = $skill5 / $studentCount;
+            } else {
+                // Handle the case when there are no student tests
+                $skill1Avg = $skill2Avg = $skill3Avg = $skill4Avg = $skill5Avg = 0;
+            }
+
        
             // Extract student IDs from the existing StudentTest entries
             $studentTestIds = array_map(function($studentTest) {
@@ -191,6 +161,12 @@ class StudentTestController extends AbstractController
             'testInfo' => $testInfo,
             'studentTests' => $studentTests,
             'students' => $students,
+            'skill1Avg' => $skill1Avg,
+            'skill2Avg' => $skill2Avg,
+            'skill3Avg' => $skill3Avg,
+            'skill4Avg' => $skill4Avg,
+            'skill5Avg' => $skill5Avg,
+
         ]);
     }
 

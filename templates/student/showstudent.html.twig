@@ -5,22 +5,6 @@
 
 
 {% block javascripts %}
-    <style>
-    .d-print-grid {
-        width: 100%; /* Or set a max-width like '700px' to fit the A4 page */
-        box-sizing: border-box;
-        padding: 0 10px; /* Adding padding can help prevent cutoff */
-    }
-
-    #studentChart {
-        height: 300px;
-    }
-
-    #studentChart:hover {
-        height: 500px;
-    }
-</style>
-
     {{ parent() }}
     <script src="{{ asset('build/chart.js') }}" defer></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
@@ -169,25 +153,25 @@
 
                 <div class="table-responsive" id="table-eval-suivi">
                     <table class="table-border-print table table-hover text-center align-middle">
-                        <thead class="sticky-top bg-light align-middle">
+                        <thead class="bg-light align-middle">
                             <tr>
-                                <th scope="col"></th>
-                                <th scope="col">Tr<span class="d-print-none">imestre</span></th>
-                                <th scope="col">Date</th>
-                                <th scope="col"><span class="compet1">Lect.</span></th>
-                                <th scope="col"><span class="compet2">Conn.</span></th>
-                                <th scope="col"><span class="compet3">Argu.</span></th>
-                                <th scope="col"><span class="compet4">Ecrit</span></th>
-                                <th scope="col"><span class="compet5">Oral</span></th>
-                                <th scope="col">Note</th>
+                                <th scope="col" class="sticky-first-column"></th>
+                                <th scope="col" class="d-none d-lg-table-cell sticky-header">Tr<span class="d-print-none">imestre</span></th>
+                                <th scope="col" class="d-none d-lg-table-cell sticky-header">Date</th>
+                                <th scope="col" class="sticky-header"><span class="compet1">Lect.</span></th>
+                                <th scope="col" class="sticky-header"><span class="compet2">Conn.</span></th>
+                                <th scope="col" class="sticky-header"><span class="compet3">Argu.</span></th>
+                                <th scope="col" class="sticky-header"><span class="compet4">Ecrit</span></th>
+                                <th scope="col" class="sticky-header"><span class="compet5">Oral</span></th>
+                                <th scope="col" class="sticky-header">Note</th>
                             </tr>
                         </thead>
                         <tbody>
                             {% for studentTest in studentTests %}
                             <tr>
-                                <th scope="row"><a class="eval-link" href="seeskills/{{studentTest.test.id}}">{{studentTest.test.description}}</a></th>
-                                <td>TR{{studentTest.test.trimester}}</td>
-                                <td>{{studentTest.test.date|date('d/m/Y')}}</td>
+                                <th scope="row" class="sticky-first-column"><a class="eval-link" href="seeskills/{{studentTest.test.id}}">{{studentTest.test.description}}</a></th>
+                                <td class="d-none d-lg-table-cell">{{studentTest.test.trimester}}</td>
+                                <td class="d-none d-lg-table-cell">{{studentTest.test.date|date('d/m/Y')}}</td>
                                 <td><div class="skill-level skill-level{{studentTest.skill1}}">{{studentTest.skill1}}</div></td>
                                 <td><div class="skill-level skill-level{{studentTest.skill2}}">{{studentTest.skill2}}</div></td>
                                 <td><div class="skill-level skill-level{{studentTest.skill3}}">{{studentTest.skill3}}</div></td>
